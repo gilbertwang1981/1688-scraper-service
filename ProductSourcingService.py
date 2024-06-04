@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 import SourcingProduct
+from flask import request
+import json
 
 app = Flask('aliWangWang-Chat-Service')
 CORS(app)
@@ -16,7 +18,9 @@ def create_sourcing():
     data = request.get_json()
 
     SourcingProduct.publishSourcing(data['userName'], data['subject'], data['amount'],
-                                    data['price'], data['desc'])
+                                    data['price'], data['desc'], data['cone'],
+                                    data['ctwo'], data['cthree'], data['aone'],
+                                    data['atwo'], data['athree'])
 
     return "SUCCESS"
 
