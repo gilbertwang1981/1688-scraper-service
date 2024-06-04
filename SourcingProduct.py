@@ -4,9 +4,6 @@ import pyautogui
 from selenium import webdriver
 import time
 
-from selenium.webdriver import ActionChains, Keys
-# import pyautogui
-
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
@@ -24,9 +21,9 @@ def publishSourcing(userName, subject, amount, price, desc,
                                 'Gecko/20100101 Firefox/122.0')
 
     service = Service('/opt/ansible/ansible/chromedriver')
-    # driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
 
     driver.get("https://www.1688.com")
 
@@ -34,8 +31,8 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     driver.delete_all_cookies()
 
-    # file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
-    file = open(userName + ".cookie", 'r')
+    file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
+    # file = open(userName + ".cookie", 'r')
 
     cookie_str = file.read()
     file.close()
