@@ -16,7 +16,7 @@ def create_sourcing():
     data = request.get_json()
 
     SourcingProduct.publishSourcing(data['userName'], data['subject'], data['amount'],
-                                    data['price'], data['desc'], data['remark'])
+                                    data['price'], data['desc'])
 
     return "SUCCESS"
 

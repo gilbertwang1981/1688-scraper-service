@@ -1,13 +1,13 @@
 import json
 from selenium import webdriver
 import time
-import pyautogui
+# import pyautogui
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 
-def publishSourcing(userName, subject, amount, price, desc, remark):
+def publishSourcing(userName, subject, amount, price, desc):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -85,21 +85,21 @@ def publishSourcing(userName, subject, amount, price, desc, remark):
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//div[@class='upload--dft']/img").click()
+    # driver.find_element(By.XPATH, "//div[@class='upload--dft']/img").click()
 
-    time.sleep(2)
+    # time.sleep(2)
 
-    pyautogui.typewrite(r'/Users/gilbert/Desktop/test.png', interval=0.15)
+    # pyautogui.typewrite(r'/Users/gilbert/Desktop/test.png', interval=0.15)
 
-    time.sleep(2)
+    # time.sleep(2)
 
-    pyautogui.press('enter')
+    # pyautogui.press('enter')
 
-    time.sleep(1)
+    # time.sleep(1)
 
-    pyautogui.press('enter')
+    # pyautogui.press('enter')
 
-    time.sleep(1)
+    # time.sleep(1)
 
     el = driver.find_element(By.XPATH, "//input[@class='next-checkbox-input']")
     el.click()
@@ -110,56 +110,54 @@ def publishSourcing(userName, subject, amount, price, desc, remark):
 
     driver.find_element(By.XPATH, "//span[text()='下一步']").click()
 
-    time.sleep(1)
+    time.sleep(2)
 
-    dt = driver.find_element(By.XPATH, "//input[@placeholder='请选择日期']")
-    dt.click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//button[@class='next-calendar-btn']").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//div[text()='7月']").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//div[text()='12']").click()
-    time.sleep(1)
+    # dt = driver.find_element(By.XPATH, "//input[@placeholder='请选择日期']")
+    # dt.click()
+    # time.sleep(1)
+    # driver.find_element(By.XPATH, "//button[@class='next-calendar-btn']").click()
+    # time.sleep(1)
+    # driver.find_element(By.XPATH, "//div[text()='7月']").click()
+    # time.sleep(1)
+    # driver.find_element(By.XPATH, "//div[text()='12']").click()
+    # time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='sendWay']").click()
-    time.sleep(1)
+    # driver.find_element(By.XPATH, "//input[@id='sendWay']").click()
+    # time.sleep(1)
 
-    el30 = driver.find_element(By.XPATH, "//span[text()='物流站点自提']")
-    el30.click()
-    el30.click()
+    # el30 = driver.find_element(By.XPATH, "//span[text()='物流站点自提']")
+    # el30.click()
+    # el30.click()
 
-    time.sleep(1)
+    # time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='invoiceType']").click()
-    time.sleep(1)
+    # driver.find_element(By.XPATH, "//input[@id='invoiceType']").click()
+    # time.sleep(1)
 
-    el40 = driver.find_element(By.XPATH, "//span[text()='增值税普通发票']")
-    el40.click()
-    el40.click()
+    # el40 = driver.find_element(By.XPATH, "//span[text()='增值税普通发票']")
+    # el40.click()
+    # el40.click()
 
-    time.sleep(1)
+    # time.sleep(1)
 
-    driver.find_element(By.XPATH, "//textarea[@id='remark']").send_keys(remark)
+    # driver.find_element(By.XPATH, "//textarea[@id='remark']").send_keys("无备注")
 
-    time.sleep(1)
+    # time.sleep(1)
 
-    inputs = driver.find_elements(By.XPATH, "//input[@placeholder='请选择日期']")
-    inputs[1].click()
+    # inputs = driver.find_elements(By.XPATH, "//input[@placeholder='请选择日期']")
+    # inputs[1].click()
 
-    driver.find_element(By.XPATH, "//button[contains(text(), '月')]").click()
-    time.sleep(1)
+    # driver.find_element(By.XPATH, "//button[contains(text(), '月')]").click()
+    # time.sleep(1)
 
-    driver.find_element(By.XPATH, "//div[text()='7月']").click()
-    time.sleep(1)
+    # driver.find_element(By.XPATH, "//div[text()='7月']").click()
+    # time.sleep(1)
 
-    days = driver.find_elements(By.XPATH, "//div[text()='2']")
-    days[1].click()
-    time.sleep(1)
+    # days = driver.find_elements(By.XPATH, "//div[text()='2']")
+    # days[1].click()
+    # time.sleep(1)
 
     driver.find_element(By.XPATH, "//button[@groupid='submit']/span[text()='立即发布']").click()
-
-    print("发布成功.")
 
     time.sleep(2)
 
