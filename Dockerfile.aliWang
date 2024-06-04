@@ -1,0 +1,43 @@
+FROM python:3.8
+
+LABEL maintainer=kp-aliWangWang-chat
+
+RUN mkdir -p /opt/apps/kp-aliWangWang-chat
+
+WORKDIR /opt/apps/kp-aliWangWang-chat
+
+RUN apt-get update
+RUN apt-get install net-tools -y
+RUN apt-get install libnss3 -y
+RUN apt-get install dbus -y
+RUN apt-get install libatk1.0-0 -y
+RUN apt-get install libatk-bridge2.0-0 -y
+RUN apt-get install cups -y
+RUN apt-get install libdrm2 -y
+RUN apt-get install libxcomposite1 -y
+RUN apt-get install libxdamage1 -y
+RUN apt-get install libxfixes-dev -y
+RUN apt-get install libxrandr2 -y
+RUN apt-get install libgbm-dev -y
+RUN apt-get install libxkbcommon0 -y
+RUN apt-get install libasound2 -y
+
+COPY aliWangWangChat.py /opt/apps/kp-aliWangWang-chat
+COPY aliWangWangChatService.py /opt/apps/kp-aliWangWang-chat
+COPY aliWangWangRx.py /opt/apps/kp-aliWangWang-chat
+COPY aliWangWangTx.py /opt/apps/kp-aliWangWang-chat
+COPY aliWangWangStoreInfo.py /opt/apps/kp-aliWangWang-chat
+COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/
+COPY *.cookie /opt/apps/kp-aliWangWang-chat/
+
+RUN cd /opt
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg --unpack google-chrome-stable_current_amd64.deb
+
+RUN /usr/local/bin/pip3 install flask
+RUN /usr/local/bin/pip3 install selenium
+RUN /usr/local/bin/pip3 install fastapi
+RUN /usr/local/bin/pip3 install uvicorn
+RUN /usr/local/bin/pip3 install flask_cors
+
+ENTRYPOINT /usr/local/bin/python3 aliWangWangChatService.py
