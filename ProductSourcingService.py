@@ -1,7 +1,5 @@
 from flask import Flask
-from flask import request
 from flask_cors import CORS
-import json
 import SourcingProduct
 
 app = Flask('aliWangWang-Chat-Service')
