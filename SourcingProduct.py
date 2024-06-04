@@ -5,23 +5,20 @@ import pyautogui
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
 
 
-def publishSourcing():
-    # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_argument('--headless')
-    # chrome_options.add_argument('--no-sandbox')
-    # chrome_options.add_argument('--single-process')
-    # chrome_options.add_argument('--disable-dev-shm-usage')
-    # chrome_options.add_argument('user-agent='
-    #                             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
-    #                             'Gecko/20100101 Firefox/122.0')
+def publishSourcing(userName, subject, amount, price, desc, remark):
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--single-process')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('user-agent='
+                                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
+                                'Gecko/20100101 Firefox/122.0')
 
-    # service = Service('/opt/ansible/ansible/chromedriver')
-    # driver = webdriver.Chrome(service=service, options=chrome_options)
-
-    driver = webdriver.Chrome()
+    service = Service('/opt/ansible/ansible/chromedriver')
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.get("https://www.1688.com")
 
@@ -29,8 +26,7 @@ def publishSourcing():
 
     driver.delete_all_cookies()
 
-    # file = open("/opt/apps/kp-aliWangWang-chat/1688.cookie", 'r')
-    file = open("1688.cookie", 'r')
+    file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -41,7 +37,7 @@ def publishSourcing():
     driver.refresh()
 
     sourcingUrl = "https://pinpai.1688.com/page/p_mro_post_buyoffer.htm?" \
-                  "source=open&entrySource=work&entrySource=homepage"
+                  "source=open&entrySource=work&entrySource=work"
 
     driver.get(sourcingUrl)
 
@@ -51,47 +47,51 @@ def publishSourcing():
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='subject']").send_keys('测试商品')
+    driver.find_element(By.XPATH, "//input[@id='subject']").send_keys(subject)
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='customCategory']").click()
-    el0 = driver.find_element(By.XPATH, "//span[text()='童装']")
+    category = driver.find_element(By.XPATH, "//input[@id='customCategory']")
+    category.click()
+
+    time.sleep(1)
+
+    el0 = driver.find_element(By.XPATH, "//span[text()='玩具']")
     el0.click()
     el0.click()
 
-    time.sleep(1)
+    time.sleep(2)
 
-    el1 = driver.find_element(By.XPATH, "//span[text()='校园服装']")
+    el1 = driver.find_element(By.XPATH, "//span[text()='儿童音乐玩具']")
     el1.click()
     el1.click()
 
-    time.sleep(1)
+    time.sleep(2)
 
-    el2 = driver.find_element(By.XPATH, "//span[text()='学生军训服']")
+    el2 = driver.find_element(By.XPATH, "//span[text()='口风琴/笛子/吹奏乐器玩具']")
     el2.click()
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='amount']").send_keys("10")
+    driver.find_element(By.XPATH, "//input[@id='amount']").send_keys(amount)
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//input[@id='price']").send_keys("8.5")
+    driver.find_element(By.XPATH, "//input[@id='price']").send_keys(price)
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//textarea[@id='description']").send_keys("这是一个测试商品寻源需求的发布！")
+    driver.find_element(By.XPATH, "//textarea[@id='description']").send_keys(desc)
 
     time.sleep(1)
 
     driver.find_element(By.XPATH, "//div[@class='upload--dft']/img").click()
 
-    time.sleep(1)
+    time.sleep(2)
 
-    pyautogui.typewrite(r'/Users/gilbert/Desktop/test.png', interval=0.1)
+    pyautogui.typewrite(r'/Users/gilbert/Desktop/test.png', interval=0.15)
 
-    time.sleep(1)
+    time.sleep(2)
 
     pyautogui.press('enter')
 
@@ -140,7 +140,7 @@ def publishSourcing():
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//textarea[@id='remark']").send_keys("无备注。")
+    driver.find_element(By.XPATH, "//textarea[@id='remark']").send_keys(remark)
 
     time.sleep(1)
 
@@ -157,9 +157,11 @@ def publishSourcing():
     days[1].click()
     time.sleep(1)
 
-    driver.find_element(By.XPATH, "//button").click()
+    driver.find_element(By.XPATH, "//button[@groupid='submit']/span[text()='立即发布']").click()
 
-    time.sleep(1)
+    print("发布成功.")
+
+    time.sleep(2)
 
     driver.close()
 

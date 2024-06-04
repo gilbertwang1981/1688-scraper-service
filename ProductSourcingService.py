@@ -13,7 +13,10 @@ def health_check():
 
 @app.route('/sourcing/create', methods=['POST'])
 def create_sourcing():
-    SourcingProduct.publishSourcing()
+    data = request.get_json()
+
+    SourcingProduct.publishSourcing(data['userName'], data['subject'], data['amount'],
+                                    data['price'], data['desc'], data['remark'])
 
     return "SUCCESS"
 
