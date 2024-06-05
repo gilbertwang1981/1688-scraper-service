@@ -28,7 +28,6 @@ RUN apt-get install wget -y
 RUN apt-get install python3.8 -y
 RUN apt-get install python3-distutils -y
 RUN apt-get install python3-dev -y
-RUN apt-get install python3-tk -y
 RUN wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
 RUN /usr/bin/python3 get-pip.py
 
@@ -51,6 +50,9 @@ RUN /usr/local/bin/pip3 install flask_cors
 RUN /usr/local/bin/pip3 install pyautogui
 RUN /usr/local/bin/pip3 install python3-xlib
 
-# ENV USER=root
-# ENTRYPOINT vncserver
-# ENTRYPOINT /usr/local/bin/python3 ProductSourcingService.py
+# 手动
+# 1. apt-get install python3-tk -y
+# 2. export USER=root
+# 3. vncserver
+# 4. export DISPLAY=:1
+# 5. nohup /usr/local/bin/python3 ProductSourcingService.py &
