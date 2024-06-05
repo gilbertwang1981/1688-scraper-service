@@ -102,7 +102,7 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     time.sleep(1)
 
-    pyautogui.typewrite(r'/tmp/wh.png', interval=0.1)
+    pyautogui.typewrite(r'/tmp/test.png', interval=0.1)
 
     time.sleep(1)
 
