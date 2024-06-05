@@ -2,7 +2,6 @@ import json
 from selenium import webdriver
 import time
 
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 import pyautogui
@@ -20,8 +19,7 @@ def publishSourcing(userName, subject, amount, price, desc,
                                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
                                 'Gecko/20100101 Firefox/122.0')
 
-    service = Service('/opt/ansible/ansible/chromedriver')
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome('/opt/ansible/ansible/chromedriver', options=chrome_options)
 
     # driver = webdriver.Chrome()
 

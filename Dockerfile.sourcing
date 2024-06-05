@@ -26,9 +26,9 @@ RUN apt-get install libasound2 -y
 RUN apt-get install libpam-cracklib -y
 RUN apt-get install wget -y
 RUN apt-get install python3.8 -y
-RUN apt-get install python3-distutils -y
-RUN apt-get install python3-dev -y
-RUN wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+RUN apt-get install python3.8-distutils -y
+RUN apt-get install python3.8-dev -y
+RUN wget https://bootstrap.pypa.io/pip/3.6/get-pip.p
 RUN /usr/bin/python3 get-pip.py
 
 COPY ProductSourcingService.py /opt/apps/kp-1688-sourcing
@@ -55,4 +55,4 @@ RUN /usr/local/bin/pip3 install python3-xlib
 # 2. export USER=root
 # 3. vncserver
 # 4. export DISPLAY=:1
-# 5. nohup /usr/local/bin/python3 ProductSourcingService.py &
+# 5. nohup /usr/bin/python3 ProductSourcingService.py &
