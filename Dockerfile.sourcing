@@ -24,6 +24,7 @@ RUN apt-get install libasound2 -y
 
 COPY ProductSourcingService.py /opt/apps/kp-1688-sourcing
 COPY SourcingProduct.py /opt/apps/kp-1688-sourcing
+COPY test.png /tmp/
 
 COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/
 COPY *.cookie /opt/apps/kp-1688-sourcing/

@@ -204,7 +204,7 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     driver.find_element(By.XPATH, "//button[@groupid='submit']/span[text()='立即发布']").click()
 
-    time.sleep(3)
+    time.sleep(1)
 
     driver.close()
 
