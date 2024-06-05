@@ -1,11 +1,11 @@
 import json
-
-import pyautogui
 from selenium import webdriver
 import time
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+
+import pyautogui
 
 
 def publishSourcing(userName, subject, amount, price, desc,
@@ -31,7 +31,7 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     driver.delete_all_cookies()
 
-    file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
+    file = open("/opt/apps/kp-1688-sourcing/" + userName + ".cookie", 'r')
     # file = open(userName + ".cookie", 'r')
 
     cookie_str = file.read()
@@ -207,4 +207,3 @@ def publishSourcing(userName, subject, amount, price, desc,
     time.sleep(1)
 
     driver.close()
-
