@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM docker.io/python:3.8-slim-bullseye
 
 LABEL maintainer=kp-1688-sourcing
 
@@ -23,13 +23,7 @@ RUN apt-get install libxrandr2 -y
 RUN apt-get install libgbm-dev -y
 RUN apt-get install libxkbcommon0 -y
 RUN apt-get install libasound2 -y
-RUN apt-get install libpam-cracklib -y
 RUN apt-get install wget -y
-RUN apt-get install python3.8 -y
-RUN apt-get install python3.8-distutils -y
-RUN apt-get install python3.8-dev -y
-RUN wget https://bootstrap.pypa.io/pip/3.6/get-pip.p
-RUN /usr/bin/python3 get-pip.py
 
 COPY ProductSourcingService.py /opt/apps/kp-1688-sourcing
 COPY SourcingProduct.py /opt/apps/kp-1688-sourcing

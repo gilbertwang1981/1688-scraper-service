@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM docker.io/python:3.8-slim-bullseye
 
 LABEL maintainer=kp-aliWangWang-chat
 
@@ -21,6 +21,7 @@ RUN apt-get install libxrandr2 -y
 RUN apt-get install libgbm-dev -y
 RUN apt-get install libxkbcommon0 -y
 RUN apt-get install libasound2 -y
+RUN apt-get install wget -y
 
 COPY aliWangWangChat.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangChatService.py /opt/apps/kp-aliWangWang-chat
