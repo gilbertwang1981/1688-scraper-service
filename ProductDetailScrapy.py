@@ -16,11 +16,13 @@ def crawl_from_1688(url, userName):
                                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
                                 'Gecko/20100101 Firefox/122.0')
 
-    driver = webdriver.Chrome('/opt/ansible/ansible/chromedriver', options=chrome_options)
+    # Version: 126, Browser and Driver
+    service = Service('/opt/ansible/ansible/chromedriver')
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.get("https://www.1688.com")
 
-    time.sleep(3)
+    time.sleep(2)
 
     driver.delete_all_cookies()
 
