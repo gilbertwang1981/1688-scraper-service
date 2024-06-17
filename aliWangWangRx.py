@@ -17,8 +17,7 @@ def getChatHistory(offerId, userName):
                                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
                                 'Gecko/20100101 Firefox/122.0')
 
-    service = Service('/opt/ansible/ansible/chromedriver')
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome('/opt/ansible/ansible/chromedriver', options=chrome_options)
 
     driver.get("https://www.1688.com")
 
