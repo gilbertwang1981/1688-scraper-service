@@ -5,6 +5,7 @@ import aliWangWangRx
 import aliWangWangTx
 import aliWangWangStoreInfo
 import json
+import aliCookieService
 
 app = Flask('aliWangWang-Chat-Service')
 CORS(app)
@@ -36,6 +37,13 @@ def get_store_info():
     data = request.get_json()
 
     return aliWangWangStoreInfo.getStoreInfo(data['offerId'], data['userName'])
+
+
+@app.route('/aliWangWang/cookie/update/<string:userName>', methods=['POST'])
+def update_ali_cookie(userName):
+    data = request.get_json()
+
+    return aliCookieService.updateCookie(userName, data)
 
 
 if __name__ == '__main__':
