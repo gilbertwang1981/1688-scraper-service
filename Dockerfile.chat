@@ -28,6 +28,7 @@ COPY aliWangWangRx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangTx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangStoreInfo.py /opt/apps/kp-aliWangWang-chat
 COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
+
 COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/
 COPY *.cookie /opt/apps/kp-aliWangWang-chat/
 
