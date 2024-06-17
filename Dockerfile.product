@@ -22,6 +22,9 @@ RUN apt-get install libgbm-dev -y
 RUN apt-get install libxkbcommon0 -y
 RUN apt-get install libasound2 -y
 RUN apt-get install wget -y
+RUN apt --fix-broken install
+RUN apt-get install dpkg -y
+RUN apt-get install libpango-1.0 -y
 
 COPY ProductDetailScrapyService.py /opt/apps/kp-1688-product
 COPY ProductDetailScrapy.py /opt/apps/kp-1688-product
