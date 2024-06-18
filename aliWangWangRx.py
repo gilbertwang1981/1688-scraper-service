@@ -13,9 +13,9 @@ def getChatHistory(offerId, userName):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--single-process')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('user-agent='
-                                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
-                                'Gecko/20100101 Firefox/122.0')
+    # chrome_options.add_argument('user-agent='
+    #                             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
+    #                             'Gecko/20100101 Firefox/122.0')
 
     # Version: 126, Browser and Driver
     service = Service('/opt/ansible/ansible/chromedriver')
@@ -70,11 +70,11 @@ def getChatHistory(offerId, userName):
 
     driver.get(chat_url)
 
-    time.sleep(2)
+    time.sleep(7)
 
     driver.maximize_window()
 
-    time.sleep(1)
+    time.sleep(3)
 
     elements = driver.find_elements(By.XPATH, "//div[contains(@class, 'message-item-line')]")
 

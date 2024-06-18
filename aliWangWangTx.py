@@ -12,14 +12,13 @@ def chatWithCustomer(offerId, chatList, userName):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--single-process')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('user-agent='
-                                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
-                                'Gecko/20100101 Firefox/122.0')
+    # chrome_options.add_argument('user-agent='
+    #                             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
+    #                             'Gecko/20100101 Firefox/122.0')
 
     # Version: 126, Browser and Driver
     service = Service('/opt/ansible/ansible/chromedriver')
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    # driver = webdriver.Chrome()
 
     driver.get("https://www.1688.com")
 
@@ -28,7 +27,6 @@ def chatWithCustomer(offerId, chatList, userName):
     driver.delete_all_cookies()
 
     file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
-    # file = open("qqq1119798839.cookie", 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -71,11 +69,11 @@ def chatWithCustomer(offerId, chatList, userName):
 
     driver.get(chat_url)
 
-    time.sleep(2)
+    time.sleep(7)
 
     driver.maximize_window()
 
-    time.sleep(1)
+    time.sleep(3)
 
     for chatContent in chatList:
         driver.find_element(By.XPATH, "//div[@class='ww_input']//pre").send_keys(chatContent)
@@ -85,6 +83,8 @@ def chatWithCustomer(offerId, chatList, userName):
         time.sleep(2)
 
     time.sleep(3)
+
+    driver.get_screenshot_as_file('tx.png')
 
     driver.close()
 
