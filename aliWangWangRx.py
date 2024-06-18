@@ -91,6 +91,8 @@ def getChatHistory(offerId, userName):
 
             chatHistory.append(data)
 
+    time.sleep(3)
+
     driver.close()
 
     return chatHistory

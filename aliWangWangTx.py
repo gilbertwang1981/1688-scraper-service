@@ -19,6 +19,7 @@ def chatWithCustomer(offerId, chatList, userName):
     # Version: 126, Browser and Driver
     service = Service('/opt/ansible/ansible/chromedriver')
     driver = webdriver.Chrome(service=service, options=chrome_options)
+    # driver = webdriver.Chrome()
 
     driver.get("https://www.1688.com")
 
@@ -27,6 +28,7 @@ def chatWithCustomer(offerId, chatList, userName):
     driver.delete_all_cookies()
 
     file = open("/opt/apps/kp-aliWangWang-chat/" + userName + ".cookie", 'r')
+    # file = open("qqq1119798839.cookie", 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -81,6 +83,8 @@ def chatWithCustomer(offerId, chatList, userName):
         driver.find_element(By.XPATH, "//div/button/span").click()
 
         time.sleep(2)
+
+    time.sleep(3)
 
     driver.close()
 

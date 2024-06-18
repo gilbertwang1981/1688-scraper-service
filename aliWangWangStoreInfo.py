@@ -47,6 +47,8 @@ def getStoreInfo(offerId, userName):
 
     storeName = driver.find_element(By.XPATH, "//div[@id='shop-container-header']//span").text
 
+    time.sleep(1)
+
     driver.close()
 
     return storeName
