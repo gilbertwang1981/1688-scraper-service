@@ -24,7 +24,9 @@ def crawl_from_1688(url, userName):
 
     driver.delete_all_cookies()
 
-    file = open("/opt/apps/kp-1688-product/" + userName + ".cookie", 'r')
+    # file = open("/opt/apps/kp-1688-product/" + userName + ".cookie", 'r')
+    file = open(userName + ".cookie", 'r')
+
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)

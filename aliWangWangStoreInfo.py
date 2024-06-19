@@ -33,7 +33,10 @@ def getStoreInfo(offerId, userName):
 
     driver.refresh()
 
-    detailUrl = 'https://detail.1688.com/offer/' + offerId + '.html'
+    detailUrl = 'https://detail.1688.com/offer/' + offerId + '.html?spm=a26352.13672862.offerlist.59.2fac1e62cO65Hm' \
+                    '&cosite=-&tracelog=p4p&_p_isad=1&' \
+                    'clickid=fcf11b87a6f14ad796969a9a52836c9b&' \
+                    'sessionid=a659238081d473668bf0881d132d92ee'
 
     driver.get(detailUrl)
 
