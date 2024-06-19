@@ -16,9 +16,6 @@ def publishSourcing(userName, subject, amount, price, desc,
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--single-process')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('user-agent='
-                                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
-                                'Gecko/20100101 Firefox/122.0')
 
     # Version: 126, Browser and Driver
     service = Service('/opt/ansible/ansible/chromedriver')

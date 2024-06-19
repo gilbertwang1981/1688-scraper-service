@@ -31,7 +31,6 @@ COPY SourcingProduct.py /opt/apps/kp-1688-sourcing
 COPY test.png /tmp/
 
 COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/
-COPY *.cookie /opt/apps/kp-1688-sourcing/
 
 RUN cd /opt
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb

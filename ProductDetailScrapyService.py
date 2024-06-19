@@ -4,7 +4,7 @@ from flask import jsonify
 import ProductDetailScrapy
 from flask_cors import CORS
 
-app = Flask('crawl-service')
+app = Flask('1688-product-service')
 CORS(app)
 
 
@@ -15,14 +15,19 @@ def health_check():
 
 @app.route('/1688/get_detail_from_1688', methods=['GET'])
 def get_detail_from_1688():
-    productId = request.args.get('id')
+    userName = request.args.get('userName')
+    offerId = request.args.get('offerId')
 
-    url = 'https://detail.1688.com/offer/' + productId + '.html?spm=a26352.13672862.offerlist.59.2fac1e62cO65Hm' \
-                                                          '&cosite=-&tracelog=p4p&_p_isad=1&' \
-                                                          'clickid=fcf11b87a6f14ad796969a9a52836c9b&' \
-                                                          'sessionid=a659238081d473668bf0881d132d92ee'
+    url = 'https://detail.1688.com/offer/' + offerId + '.html'
 
-    return jsonify(vars(ProductDetailScrapy.crawl_from_1688(url, 'tq02h2a_gb1981')))
+    return jsonify(vars(ProductDetailScrapy.crawl_from_1688(url, userName)))
+
+
+@app.route('/product/cookie/update/<string:userName>', methods=['POST'])
+def update_ali_cookie(userName):
+    data = request.get_json()
+
+    return ProductDetailScrapy.updateCookie(userName, data)
 
 
 if __name__ == '__main__':

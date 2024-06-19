@@ -7,7 +7,7 @@ import aliWangWangStoreInfo
 import json
 import aliCookieService
 
-app = Flask('aliWangWang-Chat-Service')
+app = Flask('1688-chat-service')
 CORS(app)
 
 

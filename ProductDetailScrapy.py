@@ -1,5 +1,6 @@
 import time
 import json
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -73,5 +74,19 @@ def crawl_from_1688(url, userName):
     driver.close()
 
     return p
+
+
+def updateCookie(userName, cookie):
+    cookiePath = '/opt/apps/kp-1688-product/'
+    cookieFile = cookiePath + userName + '.cookie'
+
+    if os.path.exists(cookieFile):
+        os.remove(cookieFile)
+
+    with open(cookieFile, 'w') as file:
+        file.write(json.dumps(cookie))
+
+    return "OK"
+
 
 
