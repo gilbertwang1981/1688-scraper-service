@@ -13,9 +13,6 @@ def crawl_from_1688(url, userName):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--single-process')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('user-agent='
-                                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) '
-                                'Gecko/20100101 Firefox/122.0')
 
     # Version: 126, Browser and Driver
     service = Service('/opt/ansible/ansible/chromedriver')
@@ -23,7 +20,7 @@ def crawl_from_1688(url, userName):
 
     driver.get("https://www.1688.com")
 
-    time.sleep(2)
+    time.sleep(3)
 
     driver.delete_all_cookies()
 
@@ -38,9 +35,9 @@ def crawl_from_1688(url, userName):
     driver.refresh()
 
     driver.get(url)
-    time.sleep(2)
+    time.sleep(5)
     driver.maximize_window()
-    time.sleep(1)
+    time.sleep(3)
 
     title = driver.find_element(By.XPATH, "//div[contains(@class, 'title-text')]").text
     price = driver.find_elements(By.XPATH, "//span[contains(@class, 'price-text')]")
@@ -70,6 +67,8 @@ def crawl_from_1688(url, userName):
 
     p.price = price[0].text
     p.start = start
+
+    time.sleep(3)
 
     driver.close()
 

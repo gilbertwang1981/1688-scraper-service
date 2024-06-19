@@ -23,7 +23,7 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     driver.get("https://www.1688.com")
 
-    time.sleep(2)
+    time.sleep(3)
 
     driver.delete_all_cookies()
 
@@ -44,7 +44,7 @@ def publishSourcing(userName, subject, amount, price, desc,
 
     driver.get(sourcingUrl)
 
-    time.sleep(2)
+    time.sleep(5)
 
     driver.maximize_window()
 

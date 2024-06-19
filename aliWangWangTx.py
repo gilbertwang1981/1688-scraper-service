@@ -78,7 +78,5 @@ def chatWithCustomer(offerId, chatList, userName):
 
     time.sleep(3)
 
-    driver.get_screenshot_as_file('tx.png')
-
     driver.close()
 
