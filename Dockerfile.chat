@@ -30,6 +30,10 @@ COPY aliWangWangRx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangTx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangStoreInfo.py /opt/apps/kp-aliWangWang-chat
 COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
+COPY aliCookieMonitor.py /opt/apps/kp-aliWangWang-chat
+COPY aliCookieConfig.py /opt/apps/kp-aliWangWang-chat
+
+COPY aliCookieMonitor.yaml /opt/apps/kp-aliWangWang-chat
 
 COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/
 
@@ -42,5 +46,8 @@ RUN /usr/local/bin/pip3 install selenium
 RUN /usr/local/bin/pip3 install fastapi
 RUN /usr/local/bin/pip3 install uvicorn
 RUN /usr/local/bin/pip3 install flask_cors
+RUN /usr/local/bin/pip3 install Django==4.2.13
+RUN /usr/local/bin/pip3 install requests
+RUN /usr/local/bin/pip3 install ruamel.yaml==0.18.6
 
 ENTRYPOINT /usr/local/bin/python3 aliWangWangChatService.py

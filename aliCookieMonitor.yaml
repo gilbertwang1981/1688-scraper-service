@@ -1,7 +1,5 @@
 aliCookie:
-  url: http://invtest.kuaipitest.com/1688/chat/aliWangWang/store/info
-  interval: 900
-  offerId: 685064829816
+  interval: 600
   users:
     - tq02h2a_gb1981
     - 18565086913

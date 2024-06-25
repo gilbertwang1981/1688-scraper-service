@@ -6,6 +6,7 @@ import aliWangWangTx
 import aliWangWangStoreInfo
 import json
 import aliCookieService
+import aliCookieMonitor
 
 app = Flask('1688-chat-service')
 CORS(app)
@@ -47,6 +48,7 @@ def update_ali_cookie(userName):
 
 
 if __name__ == '__main__':
+    aliCookieMonitor.start_checker()
     app.run(host='0.0.0.0', port=10015, debug=False)
 
 
