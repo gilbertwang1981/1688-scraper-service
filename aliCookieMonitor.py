@@ -1,5 +1,3 @@
-import time
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 import requests
 import json
@@ -17,14 +15,16 @@ def my_task():
         data = json.dumps({"offerId": str(config['aliCookie']['offerId']), "userName": str(user)})
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url=config['aliCookie']['url'], data=data, headers=headers)
-        robot = config['aliCookie']['robot']
-        alert = {
-            'msgtype': 'text',
-            'text': {
-                'content': str('1688账号') + str(user) + str('异常探测结果：') + str(response.status_code)
+
+        if response.status_code != 200:
+            robot = config['aliCookie']['robot']
+            alert = {
+                'msgtype': 'text',
+                'text': {
+                    'content': str('1688账号') + str(user) + str('异常探测结果：') + str(response.status_code)
+                }
             }
-        }
-        requests.post(robot, json=alert)
+            requests.post(robot, json=alert)
 
 
 scheduler = BlockingScheduler()
