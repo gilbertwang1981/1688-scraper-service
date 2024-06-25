@@ -43,7 +43,7 @@ def check_task(name):
 
             time.sleep(3)
 
-            driver.find_element(By.XPATH, "//div[text()='现货']").click()
+            driver.find_element(By.XPATH, "//div[contains(text(), '现货')]").click()
         except Exception as e:
             alert = {
                 'msgtype': 'text',
