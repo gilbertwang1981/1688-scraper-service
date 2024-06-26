@@ -54,7 +54,7 @@ def scrapVendorsByCategory(categoryUrl, userName, categoryName):
 
             driver.get(detailUrl)
 
-            time.sleep(4)
+            time.sleep(5)
 
             try:
                 title = driver.find_element(By.XPATH, "//div[@class='title-text']").text

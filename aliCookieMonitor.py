@@ -43,12 +43,13 @@ def check_task(name):
 
             time.sleep(3)
 
-            driver.find_element(By.XPATH, "//div[contains(text(), '现货')]").click()
+            driver.find_element(By.XPATH, "//th[contains(text(), '货品')]").text
         except Exception as e:
+            e.__str__()
             alert = {
                 'msgtype': 'text',
                 'text': {
-                    'content': str('1688账号') + str(user) + str('异常探测结果：失败，请检查账号有效性。') + str(e.__str__())
+                    'content': str('1688账号') + str(user) + str('异常探测结果：失败，请检查账号有效性。')
                 }
             }
             requests.post(aliCookieConfig.config['aliCookie']['robot'], json=alert)
