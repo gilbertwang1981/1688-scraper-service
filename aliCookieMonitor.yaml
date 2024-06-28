@@ -1,9 +1,8 @@
 aliCookie:
-  interval: 600
+  interval: 1200
   users:
     - tq02h2a_gb1981
     - 18565086913
     - 15876578981
     - 17620848116
-    - 14775116212
   robot: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=bda14df6-be9b-4064-8623-94799fd1bbf1
