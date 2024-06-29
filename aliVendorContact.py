@@ -16,12 +16,13 @@ def getDatabaseConnection4Vendor():
     return mysqlConn4Vendor
 
 
-def getProductIds(_begin, _offset, _categoryOne):
+def getProductIds(_begin, _offset, _categoryOne, _categoryThree):
     try:
         _connection = getDatabaseConnection4Vendor()
 
         _cursor = _connection.cursor()
-        _cursor.execute("select offer_id from product_vendor_1688 where category_one = '" + _categoryOne + "' order by id asc limit "
+        _cursor.execute("select offer_id from product_vendor_1688 where category_one = '" +
+                        _categoryOne + "' and category_three= '" + _categoryThree + "'order by id asc limit "
                         + str(_begin) + "," + str(_offset))
         _productIds = _cursor.fetchall()
 
@@ -186,7 +187,7 @@ if __name__ == '__main__':
 
     initProductIds(userName, url, categoryOne, categoryThree)
 
-    rows = getProductIds(begin, offset, categoryOne)
+    rows = getProductIds(begin, offset, categoryOne, categoryThree)
     productIds = []
     for row in rows:
         productIds.append(row[0])
