@@ -1,0 +1,14 @@
+aliVendor:
+  db:
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    pass: root
+    dbName: kp_sk_sync
+  ali:
+    user: 'tq02h2a_gb1981'
+    categoryUrl: 'https://show.1688.com/pinlei/industry/pllist.html?spm=a262eq.12572798.jsczhi85.4.7e952fb1AxVucu&sceneSetId=869&sceneId=7014&bizId=9707'
+    categoryOne: '家居百货'
+    categoryThree: '挂钩粘钩'
+    offset: 10
+    begin: 0
