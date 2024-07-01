@@ -2,6 +2,7 @@ import time
 from selenium import webdriver
 import json
 from selenium.webdriver.common.by import By
+
 import aliVendorConfig
 import pymysql
 
@@ -14,6 +15,14 @@ def getDatabaseConnection4Vendor():
                                        database=aliVendorConfig.aliVendorConfig['aliVendor']['db']['dbName'])
 
     return mysqlConn4Vendor
+
+
+def getCookie(_userName):
+    cookie = open(aliVendorConfig.aliVendorConfig['aliVendor']['ali']['cookieDir'] + str(_userName) + ".cookie", 'r')
+    cookie_str = cookie.read()
+    cookie.close()
+
+    return cookie_str
 
 
 def getProductIds(_begin, _offset, _categoryOne, _categoryThree):
@@ -52,9 +61,12 @@ def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
 
         driver.delete_all_cookies()
 
-        cookie = open("/Users/gilbert/vendor-info/" + str(_userName) + ".cookie", 'r')
-        cookie_str = cookie.read()
-        cookie.close()
+        cookie_str = getCookie(_userName)
+        if cookie_str is None:
+            print("加载cookie失败," + _userName)
+
+            return
+
         cookies = json.loads(cookie_str)
 
         for c in cookies:
@@ -89,6 +101,9 @@ def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
 
             i = i + 1
         _connection.commit()
+
+        print("初始化数据集." + str(len(offerIds)))
+
     except Exception as e:
         print(e.__str__())
         if _connection:
@@ -112,9 +127,12 @@ def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
 
         driver.delete_all_cookies()
 
-        cookie = open("/Users/gilbert/vendor-info/" + str(_userName) + ".cookie", 'r')
-        cookie_str = cookie.read()
-        cookie.close()
+        cookie_str = getCookie(_userName)
+        if cookie_str is None:
+            print("加载cookie失败," + _userName)
+
+            return
+
         cookies = json.loads(cookie_str)
 
         for c in cookies:
@@ -139,9 +157,15 @@ def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
 
             time.sleep(3)
 
-            title = driver.find_element(By.XPATH, "//div[@class='title-text']").text
+            try:
+                title = driver.find_element(By.XPATH, "//div[@class='title-text']").text
 
-            driver.find_element(By.XPATH, "//a[text()='联系方式']").click()
+                driver.find_element(By.XPATH, "//a[text()='联系方式']").click()
+            except Exception as e:
+                e.__str__()
+                i = i + 1
+                continue
+                pass
 
             time.sleep(3)
 
@@ -185,7 +209,9 @@ if __name__ == '__main__':
     begin = aliVendorConfig.aliVendorConfig['aliVendor']['ali']['begin']
     offset = aliVendorConfig.aliVendorConfig['aliVendor']['ali']['offset']
 
-    initProductIds(userName, url, categoryOne, categoryThree)
+    rows = getProductIds(begin, offset, categoryOne, categoryThree)
+    if rows.__len__() <= 0:
+        initProductIds(userName, url, categoryOne, categoryThree)
 
     rows = getProductIds(begin, offset, categoryOne, categoryThree)
     productIds = []

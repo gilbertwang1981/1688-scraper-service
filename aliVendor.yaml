@@ -3,12 +3,13 @@ aliVendor:
     host: 127.0.0.1
     port: 3306
     user: root
-    pass: root
+    pass: abc123
     dbName: kp_sk_sync
   ali:
     user: 'tq02h2a_gb1981'
-    categoryUrl: 'https://show.1688.com/pinlei/industry/pllist.html?spm=a262eq.12572798.jsczhi85.4.7e952fb1AxVucu&sceneSetId=869&sceneId=7014&bizId=9707'
-    categoryOne: '家居百货'
-    categoryThree: '挂钩粘钩'
-    offset: 10
+    cookieDir: '/Users/gilbert/vendor-info/'
+    categoryUrl: 'https://show.1688.com/pinlei/industry/pllist.html?spm=a262eq.12572798.jsczez1k.20.5e072fb1j3yewW&&sceneSetId=854&sceneId=5971&bizId=8693&adsSearchWord=%E5%A4%AA%E9%98%B3%E8%83%BD%E7%81%AF'
+    categoryOne: '灯饰照明'
+    categoryThree: '太阳能灯'
+    offset: 30
     begin: 0
