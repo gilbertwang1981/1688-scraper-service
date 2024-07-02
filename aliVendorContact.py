@@ -92,22 +92,24 @@ def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
 
         i = 0
         _connection = getDatabaseConnection4Vendor()
+        _cursor = _connection.cursor()
         while i < len(offerIds):
             if offerIds[i].get_attribute('id') != '':
-                _cursor = _connection.cursor()
                 _offerId = offerIds[i].get_attribute('id')
-                _cursor.execute("insert into product_vendor_1688(offer_id, category_one, category_three) values('"
-                                + _offerId + "', '" + _categoryOne + "', '" + _categoryThree + "')")
-
+                try:
+                    _cursor.execute("insert into product_vendor_1688(offer_id, category_one, category_three) "
+                                    "values('" + _offerId + "', '" + _categoryOne + "', '" + _categoryThree + "')")
+                except Exception as e:
+                    print(e.__str__())
+                    _connection.rollback()
+                else:
+                    _connection.commit()
             i = i + 1
-        _connection.commit()
 
         print("初始化数据集." + str(len(offerIds)))
 
     except Exception as e:
         print(e.__str__())
-        if _connection:
-            _connection.rollback()
     finally:
         driver.close()
 
@@ -161,34 +163,37 @@ def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
                 title = driver.find_element(By.XPATH, "//div[@class='title-text']").text
 
                 driver.find_element(By.XPATH, "//a[text()='联系方式']").click()
+
+                time.sleep(3)
+
+                windows = driver.window_handles
+                driver.switch_to.window(windows[-1])
+                driver.maximize_window()
+
+                phone = driver.find_element(By.XPATH,
+                                            "//div[contains(text(), '手机：')]/following-sibling::*[position()=1]").text
+
+                company = driver.find_element(By.XPATH,
+                                              "//div[text()='联系方式']/following-sibling::*[position()=1]").text
+            except Exception as e:
+                i = i + 1
+                e.__str__()
+                continue
+
+            try:
+                if phone != '' and not phone.__contains__('暂无'):
+                    _cursor.execute("update product_vendor_1688 set title='" + title + "', mobile=" + str(phone) +
+                                    ", company='" + company + "' where offer_id=" + str(productIds[i]))
             except Exception as e:
                 e.__str__()
-                i = i + 1
-                continue
-                pass
-
-            time.sleep(3)
-
-            windows = driver.window_handles
-            driver.switch_to.window(windows[-1])
-            driver.maximize_window()
-
-            phone = driver.find_element(By.XPATH,
-                                        "//div[contains(text(), '手机：')]/following-sibling::*[position()=1]").text
-
-            company = driver.find_element(By.XPATH,
-                                          "//div[text()='联系方式']/following-sibling::*[position()=1]").text
-
-            if phone != '' and not phone.__contains__('暂无'):
-                _cursor.execute("update product_vendor_1688 set title='" + title + "', mobile=" + str(phone) +
-                                ", company='" + company + "' where offer_id=" + str(productIds[i]))
+                _connection.rollback()
+            else:
+                _connection.commit()
 
             i = i + 1
 
             windows = driver.window_handles
             driver.switch_to.window(windows[-1])
-
-            _connection.commit()
     except Exception as e:
         print(e.__str__())
         if _connection:
