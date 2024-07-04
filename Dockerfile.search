@@ -7,8 +7,6 @@ RUN mkdir -p /opt/apps/kp-1688-search
 WORKDIR /opt/apps/kp-1688-search
 
 RUN apt-get update
-RUN apt-get install xvfb -y
-RUN apt-get install tightvncserver -y
 RUN apt-get install net-tools -y
 RUN apt-get install libnss3 -y
 RUN apt-get install dbus -y
@@ -23,8 +21,7 @@ RUN apt-get install libxrandr2 -y
 RUN apt-get install libgbm-dev -y
 RUN apt-get install libxkbcommon0 -y
 RUN apt-get install libasound2 -y
-RUN apt-get install wget -y
-RUN apt-get install libpango-1.0 -y
+RUN apt-get install xclip -y
 
 COPY aliImageSearch.py /opt/apps/kp-1688-search
 COPY aliImageSearchService.py /opt/apps/kp-1688-search
@@ -41,13 +38,5 @@ RUN /usr/local/bin/pip3 install selenium
 RUN /usr/local/bin/pip3 install fastapi
 RUN /usr/local/bin/pip3 install uvicorn
 RUN /usr/local/bin/pip3 install flask_cors
-RUN /usr/local/bin/pip3 install pyautogui
-RUN /usr/local/bin/pip3 install python3-xlib
-RUN /usr/local/bin/pip3 install requests
 
-# 手动
-# 1. apt-get install python3-tk -y
-# 2. export USER=root
-# 3. vncserver
-# 4. export DISPLAY=:1
-# 5. nohup /usr/local/bin/python3 aliImageSearchService.py &
+ENTRYPOINT /usr/local/bin/python3 aliImageSearchService.py

@@ -3,29 +3,13 @@ from selenium import webdriver
 import time
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import pyautogui
-import requests
 import aliImageSearchConst
-import random
-
-
-def downloadImage(img_url):
-    headers = {
-        'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
-    }
-    r = requests.get(img_url, headers=headers, stream=True)
-    if r.status_code == 200:
-        with open("/tmp/t.png", 'wb') as f:
-            f.write(r.content)
-        return True
 
 
 def getCookie(userName):
     if aliImageSearchConst.ALI_COOKIES is None:
-        file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
-        # file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
+        # file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
+        file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
         cookie_str = file.read()
         file.close()
         cookies = json.loads(cookie_str)
@@ -45,8 +29,8 @@ def initChrome(userName):
 
         # Version: 126, Browser and Driver
         service = Service('/opt/ansible/ansible/chromedriver')
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        # driver = webdriver.Chrome()
+        # driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome()
 
         driver.get("https://www.1688.com")
 
@@ -74,42 +58,35 @@ def getDriver(userName):
     return initChrome(userName)
 
 
-def initChromePool(size):
-    _chrome_drivers = []
-    i = 0
-    while i < size:
-        _chrome_drivers.append(getDriver('tq02h2a_gb1981'))
-        i = i + 1
+def initChromePool():
+    _chrome_drivers = [getDriver('15876578981'), getDriver('tq02h2a_gb1981')]
 
     return _chrome_drivers
 
 
-chrome_drivers = initChromePool(1)
+chrome_drivers = initChromePool()
 
 
-def getDriverFromPool(size):
-    index = random.randint(0, 99) % size
+def getDriverFromPool():
+    with aliImageSearchConst.indexLocking:
+        aliImageSearchConst.index = aliImageSearchConst.index + 1
 
-    return chrome_drivers[index]
+        return chrome_drivers[aliImageSearchConst.index % len(chrome_drivers)]
 
 
-def aliSearch():
+def aliSearch(imageUrl):
     try:
-        _driver = getDriverFromPool(1)
+        _driver = getDriverFromPool()
 
         _driver.get("https://s.1688.com/selloffer/offer_search.html")
 
         time.sleep(1)
 
-        _driver.find_element(By.XPATH, "//div[@id='img-search-upload']").click()
+        _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
 
         time.sleep(1)
 
-        pyautogui.typewrite(r'/tmp/t.png', interval=0.1)
-
-        pyautogui.press('enter')
-        time.sleep(1)
-        pyautogui.press('enter')
+        _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
 
         time.sleep(1)
 
