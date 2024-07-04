@@ -18,7 +18,7 @@ def search():
 
     aliImageSearch.downloadImage(data['imageUrl'])
 
-    targets = aliImageSearch.aliSearch(data['userName'])
+    targets = aliImageSearch.aliSearch()
 
     return targets
 
