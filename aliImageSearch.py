@@ -24,7 +24,7 @@ def downloadImage(img_url):
 
 def getCookie(userName):
     if aliImageSearchConst.ALI_COOKIES is None:
-        file = open("/opt/apps/kp-search-service/" + userName + ".cookie", 'r')
+        file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
         # file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
         cookie_str = file.read()
         file.close()
@@ -105,7 +105,7 @@ def aliSearch():
 
         time.sleep(1)
 
-        pyautogui.typewrite("/tmp/t.png", interval=0.1)
+        pyautogui.typewrite(r'/tmp/t.png', interval=0.1)
 
         pyautogui.press('enter')
         time.sleep(1)
