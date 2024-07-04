@@ -2,6 +2,9 @@ import aliImageSearch
 from flask import request
 from flask import Flask
 from flask_cors import CORS
+import threading
+
+singleTask = threading.Lock()
 
 app = Flask('1688-search-service')
 CORS(app)
@@ -14,13 +17,14 @@ def health_check():
 
 @app.route('/image/search', methods=['POST'])
 def search():
-    data = request.get_json()
+    with singleTask:
+        data = request.get_json()
 
-    aliImageSearch.downloadImage(data['imageUrl'])
+        aliImageSearch.downloadImage(data['imageUrl'])
 
-    targets = aliImageSearch.aliSearch()
+        targets = aliImageSearch.aliSearch()
 
-    return targets
+        return targets
 
 
 if __name__ == '__main__':

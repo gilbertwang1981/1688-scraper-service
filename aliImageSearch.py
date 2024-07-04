@@ -25,6 +25,7 @@ def downloadImage(img_url):
 def getCookie(userName):
     if aliImageSearchConst.ALI_COOKIES is None:
         file = open("/opt/apps/kp-search-service/" + userName + ".cookie", 'r')
+        # file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
         cookie_str = file.read()
         file.close()
         cookies = json.loads(cookie_str)
@@ -45,6 +46,7 @@ def initChrome(userName):
         # Version: 126, Browser and Driver
         service = Service('/opt/ansible/ansible/chromedriver')
         driver = webdriver.Chrome(service=service, options=chrome_options)
+        # driver = webdriver.Chrome()
 
         driver.get("https://www.1688.com")
 
