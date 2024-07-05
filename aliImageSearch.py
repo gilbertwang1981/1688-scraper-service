@@ -7,16 +7,13 @@ import aliImageSearchConst
 
 
 def getCookie(userName):
-    if aliImageSearchConst.ALI_COOKIES is None:
-        # file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
-        file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
-        cookie_str = file.read()
-        file.close()
-        cookies = json.loads(cookie_str)
+    file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
+    # file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
+    cookie_str = file.read()
+    file.close()
+    cookies = json.loads(cookie_str)
 
-        aliImageSearchConst.ALI_COOKIES = cookies
-
-    return aliImageSearchConst.ALI_COOKIES
+    return cookies
 
 
 def initChrome(userName):
@@ -29,8 +26,8 @@ def initChrome(userName):
 
         # Version: 126, Browser and Driver
         service = Service('/opt/ansible/ansible/chromedriver')
-        # driver = webdriver.Chrome(service=service, options=chrome_options)
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+        # driver = webdriver.Chrome()
 
         driver.get("https://www.1688.com")
 
@@ -59,7 +56,7 @@ def getDriver(userName):
 
 
 def initChromePool():
-    _chrome_drivers = [getDriver('15876578981'), getDriver('tq02h2a_gb1981')]
+    _chrome_drivers = [getDriver('tq02h2a_gb1981'), getDriver('17620848116')]
 
     return _chrome_drivers
 
@@ -69,9 +66,20 @@ chrome_drivers = initChromePool()
 
 def getDriverFromPool():
     with aliImageSearchConst.indexLocking:
+        if aliImageSearchConst.CURRENT >= len(chrome_drivers):
+            return None
+        else:
+            aliImageSearchConst.CURRENT = aliImageSearchConst.CURRENT + 1
+
         aliImageSearchConst.index = aliImageSearchConst.index + 1
 
         return chrome_drivers[aliImageSearchConst.index % len(chrome_drivers)]
+
+
+def releaseDriverToPool():
+    with aliImageSearchConst.indexLocking:
+        if aliImageSearchConst.CURRENT > 0:
+            aliImageSearchConst.CURRENT = aliImageSearchConst.CURRENT - 1
 
 
 def aliSearch(imageUrl):
@@ -106,6 +114,9 @@ def aliSearch(imageUrl):
         print(e.__str__())
 
         return []
+    finally:
+        releaseDriverToPool()
+
 
 
 
