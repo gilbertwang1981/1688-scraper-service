@@ -83,9 +83,11 @@ def releaseDriverToPool():
 
 
 def aliSearch(imageUrl):
-    try:
-        _driver = getDriverFromPool()
+    _driver = getDriverFromPool()
+    if _driver is None:
+        return []
 
+    try:
         _driver.get("https://s.1688.com/selloffer/offer_search.html")
 
         time.sleep(1)
