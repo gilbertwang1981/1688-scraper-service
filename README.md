@@ -9,13 +9,16 @@
 
 ## 编译/部署
 #### 1. 通过下列命令打包镜像；
-docker build -f Dockerfile.chat -t 1688-chat-service:1.0 .
+##### 
+	docker build -f Dockerfile.chat -t 1688-chat-service:1.0 .
 
 #### 2. 通过以下命令启动服务；
-docker run -itd -p 10019:10015 1688-chat-service:1.0 /bin/sh
+##### 
+	docker run -itd -p 10019:10015 1688-chat-service:1.0 /bin/sh
 
 #### 3. 通过以下命令查看服务是否正常；
-docker logs -f container_id
+##### 
+	docker logs -f container_id
 
 
 
@@ -33,7 +36,8 @@ docker logs -f container_id
 	METHOD: POST
 ##### 
 	URL:http://ip:10019/aliWangWang/tx
-##### BODY: 
+##### 
+	BODY: 
 	{
 		"offerId": "679618131020",
 		"chatList": [
