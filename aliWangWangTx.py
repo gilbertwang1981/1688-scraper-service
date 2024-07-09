@@ -1,4 +1,6 @@
 import time
+
+import aliWangWangConfig
 import aliWangWangConnection
 from selenium.webdriver.common.by import By
 
@@ -6,6 +8,13 @@ from selenium.webdriver.common.by import By
 def chatWithCustomer(offerId, chatList, userName):
     with aliWangWangConnection.global_chat_lock:
         try:
+            if aliWangWangConnection.message_count > aliWangWangConfig.aliWangWangConfig['aliWangWang']['count']:
+                aliWangWangConnection.destroyPool()
+                aliWangWangConnection.initChromePool()
+                aliWangWangConnection.message_count = 0
+            else:
+                aliWangWangConnection.message_count = aliWangWangConnection.message_count + 1
+
             driver = aliWangWangConnection.getChromeInstance(userName)
 
             detailUrl = 'https://detail.1688.com/offer/' + offerId + \

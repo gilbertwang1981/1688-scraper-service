@@ -28,14 +28,10 @@ COPY aliWangWangChat.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangChatService.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangRx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangTx.py /opt/apps/kp-aliWangWang-chat
-COPY aliWangWangStoreInfo.py /opt/apps/kp-aliWangWang-chat
-COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
-COPY aliCookieMonitor.py /opt/apps/kp-aliWangWang-chat
-COPY aliCookieConfig.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConfig.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConnection.py /opt/apps/kp-aliWangWang-chat
+COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
 
-COPY aliCookieMonitor.yaml /opt/apps/kp-aliWangWang-chat
 COPY aliWangWang.yaml /opt/apps/kp-aliWangWang-chat
 
 COPY chrome/chromedriver-linux64/chromedriver /opt/ansible/ansible/

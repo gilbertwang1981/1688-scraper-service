@@ -1,9 +1,10 @@
 import json
 import os
+import aliWangWangConfig
 
 
 def updateCookie(userName, cookie):
-    cookiePath = '/opt/apps/kp-aliWangWang-chat/'
+    cookiePath = aliWangWangConfig.aliWangWangConfig['aliWangWang']['cookieDir']
     cookieFile = cookiePath + userName + '.cookie'
 
     if os.path.exists(cookieFile):

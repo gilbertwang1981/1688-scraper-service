@@ -10,6 +10,8 @@ import aliWangWangConfig
 global_chrome_driver_instances = []
 global_chat_lock = threading.Lock()
 
+message_count = 0
+
 
 def createChromeInstance(userName):
     try:
@@ -52,14 +54,19 @@ def createChromeInstance(userName):
 def initChromePool():
     users = aliWangWangConfig.aliWangWangConfig['aliWangWang']['users']
     for user in users:
-        global_chrome_driver_instances.append({'userName' : user, 'driver': createChromeInstance(user)})
+        print("准备创建链接，" + user)
+        global_chrome_driver_instances.append({'userName': user, 'driver': createChromeInstance(user)})
 
     print("初始化链接池完成.")
 
 
 def destroyPool():
     for conn in global_chrome_driver_instances:
+        print("准备销毁链接：" + conn['userName'])
         conn['driver'].close()
+
+    global_chrome_driver_instances.clear()
+
     print("销毁完所有的链接.")
 
 

@@ -2,11 +2,19 @@ import time
 from selenium.webdriver.common.by import By
 from aliWangWangChat import ChatObject
 import aliWangWangConnection
+import aliWangWangConfig
 
 
 def getChatHistory(offerId, userName):
     with aliWangWangConnection.global_chat_lock:
         try:
+            if aliWangWangConnection.message_count > aliWangWangConfig.aliWangWangConfig['aliWangWang']['count']:
+                aliWangWangConnection.destroyPool()
+                aliWangWangConnection.initChromePool()
+                aliWangWangConnection.message_count = 0
+            else:
+                aliWangWangConnection.message_count = aliWangWangConnection.message_count + 1
+
             driver = aliWangWangConnection.getChromeInstance(userName)
 
             detailUrl = 'https://detail.1688.com/offer/' + offerId +\
@@ -40,13 +48,13 @@ def getChatHistory(offerId, userName):
             driver.switch_to.window(windows[-1])
             driver.maximize_window()
 
-            time.sleep(2)
+            time.sleep(1)
 
             chat_url = driver.find_element(By.XPATH, "//div[@id='ice-container']//iframe").get_attribute("src")
 
             driver.get(chat_url)
 
-            time.sleep(3)
+            time.sleep(2)
 
             driver.maximize_window()
 
