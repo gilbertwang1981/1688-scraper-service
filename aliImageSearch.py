@@ -7,8 +7,8 @@ import aliImageSearchConst
 
 
 def getCookie(userName):
-    file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
-    # file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
+    # file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
+    file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -26,8 +26,8 @@ def initChrome(userName):
 
         # Version: 126, Browser and Driver
         service = Service('/opt/ansible/ansible/chromedriver')
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        # driver = webdriver.Chrome()
+        # driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome()
 
         driver.get("https://www.1688.com")
 
