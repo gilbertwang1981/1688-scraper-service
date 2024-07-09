@@ -1,9 +1,8 @@
 import json
 from selenium import webdriver
 import time
-
+import os
 from selenium.webdriver.chrome.service import Service
-
 import threading
 import aliWangWangConfig
 
@@ -14,6 +13,10 @@ message_count = 0
 
 
 def createChromeInstance(userName):
+    if not os.path.exists(
+            aliWangWangConfig.aliWangWangConfig['aliWangWang']['cookieDir'] + userName + ".cookie"):
+        return None
+
     try:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
@@ -54,16 +57,18 @@ def createChromeInstance(userName):
 def initChromePool():
     users = aliWangWangConfig.aliWangWangConfig['aliWangWang']['users']
     for user in users:
-        print("准备创建链接，" + user)
-        global_chrome_driver_instances.append({'userName': user, 'driver': createChromeInstance(user)})
+        connection = createChromeInstance(user)
+        if connection is not None:
+            global_chrome_driver_instances.append({'userName': user, 'driver': connection})
+            print("链接创建成功，" + user)
 
     print("初始化链接池完成.")
 
 
 def destroyPool():
     for conn in global_chrome_driver_instances:
-        print("准备销毁链接：" + conn['userName'])
         conn['driver'].close()
+        print("销毁链接成功：" + conn['userName'])
 
     global_chrome_driver_instances.clear()
 

@@ -1,8 +1,7 @@
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-import aliWangWangRx
-import aliWangWangTx
+import aliWangWangTxRx
 import json
 import aliCookieService
 
@@ -19,7 +18,7 @@ def health_check():
 def send_chat():
     data = request.get_json()
 
-    aliWangWangTx.chatWithCustomer(data['offerId'], data['chatList'], data['userName'])
+    aliWangWangTxRx.chatWithCustomer(data['offerId'], data['chatList'], data['userName'])
 
     return "SUCCESS"
 
@@ -28,14 +27,18 @@ def send_chat():
 def recv_chat():
     data = json.loads(json.dumps(request.get_json()))
 
-    return json.dumps(aliWangWangRx.getChatHistory(data['offerId'], data['userName']), default=lambda o: o.__dict__)
+    return json.dumps(aliWangWangTxRx.getChatHistory(data['offerId'], data['userName']), default=lambda o: o.__dict__)
 
 
 @app.route('/aliWangWang/cookie/update/<string:userName>', methods=['POST'])
 def update_ali_cookie(userName):
     data = request.get_json()
 
-    return aliCookieService.updateCookie(userName, data)
+    aliCookieService.updateCookie(userName, data)
+
+    aliWangWangTxRx.reload_chrome_pool()
+
+    return "OK"
 
 
 if __name__ == '__main__':

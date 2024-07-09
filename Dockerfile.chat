@@ -26,8 +26,7 @@ RUN apt-get install libpango-1.0 -y
 
 COPY aliWangWangChat.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangChatService.py /opt/apps/kp-aliWangWang-chat
-COPY aliWangWangRx.py /opt/apps/kp-aliWangWang-chat
-COPY aliWangWangTx.py /opt/apps/kp-aliWangWang-chat
+COPY aliWangWangTxRx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConfig.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConnection.py /opt/apps/kp-aliWangWang-chat
 COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
