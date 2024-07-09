@@ -54,3 +54,14 @@ docker logs -f container_id
 		"userName": "loginAccount"
 	}
 
+#### 4. 获取商品详情；
+#####
+	METHOD: POST
+##### 
+	URL:http://ip:10019/aliWangWang/getDetail
+##### 
+	BODY: 
+	{
+		"offerId": "679618131020",
+		"userName": "loginAccount"
+	}
