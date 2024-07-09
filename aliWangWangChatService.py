@@ -5,6 +5,7 @@ import aliWangWangTxRx
 import json
 import aliCookieService
 
+
 app = Flask('1688-chat-service')
 CORS(app)
 
@@ -12,6 +13,13 @@ CORS(app)
 @app.route('/health', methods=['GET'])
 def health_check():
     return "OK"
+
+
+@app.route('/aliWangWang/getDetail', methods=['POST'])
+def get_detail():
+    data = json.loads(json.dumps(request.get_json()))
+
+    return json.dumps(aliWangWangTxRx.getProductDetail(data['offerId'], data['userName']), default=lambda o: o.__dict__)
 
 
 @app.route('/aliWangWang/tx', methods=['POST'])
