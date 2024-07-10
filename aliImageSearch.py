@@ -48,6 +48,10 @@ def initChrome(userName):
 
         driver.refresh()
 
+        driver.get("https://s.1688.com/selloffer/offer_search.html")
+
+        WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.ID, 'alisearch-input')))
+
         return driver
     except Exception as e:
         print(e.__str__())
@@ -96,15 +100,11 @@ def aliSearch(imageUrl):
         return []
 
     try:
-        _driver.get("https://s.1688.com/selloffer/offer_search.html")
-
-        WebDriverWait(_driver, 1).until(EC.presence_of_element_located((By.ID, 'alisearch-input')))
-
         _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
 
         _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
 
-        time.sleep(500/1000)
+        time.sleep(1)
 
         products = _driver.find_elements(By.XPATH, "//div[@class='img-container']/div/a/div[@class='img']")
 
