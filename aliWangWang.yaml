@@ -1,8 +1,9 @@
 aliWangWang:
-  prod: 1
-  count: 1
+  port: 10015
+  prod: 0
+  count: 2
   users:
     - '17620848116'
     - 'tq02h2a_gb1981'
-  # cookieDir: '/Users/gilbert/vendor-info/'
-  cookieDir: '/opt/apps/kp-aliWangWang-chat/'
+  cookieDir: '/Users/gilbert/vendor-info/'
+  # cookieDir: '/opt/apps/kp-aliWangWang-chat/'

@@ -4,6 +4,7 @@ from flask_cors import CORS
 import aliWangWangTxRx
 import json
 import aliCookieService
+import aliWangWangConfig
 
 
 app = Flask('1688-chat-service')
@@ -44,12 +45,12 @@ def update_ali_cookie(userName):
 
     aliCookieService.updateCookie(userName, data)
 
-    aliWangWangTxRx.reload_chrome_pool()
+    aliWangWangTxRx.reloadChromePool()
 
     return "OK"
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10015, debug=False)
+    app.run(host='0.0.0.0', port=aliWangWangConfig.aliWangWangConfig['aliWangWang']['port'], debug=False)
 
 

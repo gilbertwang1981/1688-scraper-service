@@ -83,4 +83,16 @@ def getChromeInstance(userName):
     return None
 
 
+def getDriverInstance(userName):
+    global message_count
+    if message_count > aliWangWangConfig.aliWangWangConfig['aliWangWang']['count']:
+        destroyPool()
+        initChromePool()
+        message_count = 0
+    else:
+        message_count = message_count + 1
+
+    return getChromeInstance(userName)
+
+
 initChromePool()
