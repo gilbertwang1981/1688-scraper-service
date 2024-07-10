@@ -30,6 +30,7 @@ COPY aliWangWangTxRx.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConfig.py /opt/apps/kp-aliWangWang-chat
 COPY aliWangWangConnection.py /opt/apps/kp-aliWangWang-chat
 COPY aliCookieService.py /opt/apps/kp-aliWangWang-chat
+COPY ProductDetail.py /opt/apps/kp-aliWangWang-chat
 
 COPY aliWangWang.yaml /opt/apps/kp-aliWangWang-chat
 
