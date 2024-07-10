@@ -4,11 +4,15 @@ import time
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import aliImageSearchConst
+import aliImageSearchConfig
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def getCookie(userName):
-    # file = open("/opt/apps/kp-1688-search/" + userName + ".cookie", 'r')
-    file = open("/Users/gilbert/vendor-info/" + userName + ".cookie", 'r')
+    file = open(
+        aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['cookieDir'] +
+        userName + ".cookie", 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -18,16 +22,18 @@ def getCookie(userName):
 
 def initChrome(userName):
     try:
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--single-process')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-
         # Version: 126, Browser and Driver
-        service = Service('/opt/ansible/ansible/chromedriver')
-        # driver = webdriver.Chrome(service=service, options=chrome_options)
-        driver = webdriver.Chrome()
+        if aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['prod'] == 1:
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--single-process')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+
+            service = Service('/opt/ansible/ansible/chromedriver')
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+        else:
+            driver = webdriver.Chrome()
 
         driver.get("https://www.1688.com")
 
@@ -56,7 +62,9 @@ def getDriver(userName):
 
 
 def initChromePool():
-    _chrome_drivers = [getDriver('tq02h2a_gb1981'), getDriver('17620848116')]
+    _chrome_drivers = []
+    for user in aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['users']:
+        _chrome_drivers.append(getDriver(user))
 
     return _chrome_drivers
 
@@ -90,20 +98,21 @@ def aliSearch(imageUrl):
     try:
         _driver.get("https://s.1688.com/selloffer/offer_search.html")
 
-        time.sleep(1)
+        WebDriverWait(_driver, 1).until(EC.presence_of_element_located((By.ID, 'alisearch-input')))
 
         _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
 
-        time.sleep(1)
-
         _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
 
-        time.sleep(1)
+        time.sleep(500/1000)
 
         products = _driver.find_elements(By.XPATH, "//div[@class='img-container']/div/a/div[@class='img']")
 
         urls = []
         for detail in products:
+            if len(urls) >= 5:
+                break
+
             urlStr = detail.get_attribute('style')
 
             begin = urlStr.index("url") + 5
