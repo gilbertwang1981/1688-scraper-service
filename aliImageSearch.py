@@ -1,18 +1,25 @@
 import json
 from selenium import webdriver
 import time
+import threading
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import aliImageSearchConst
 import aliImageSearchConfig
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
+
+thread_pool_lock = threading.Lock()
+
+chrome_drivers = []
 
 
 def getCookie(userName):
-    file = open(
-        aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['cookieDir'] +
-        userName + ".cookie", 'r')
+    filePath = aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['cookieDir'] + userName + ".cookie"
+    if not os.path.exists(filePath):
+        return []
+
+    file = open(filePath, 'r')
     cookie_str = file.read()
     file.close()
     cookies = json.loads(cookie_str)
@@ -42,6 +49,10 @@ def initChrome(userName):
         driver.delete_all_cookies()
 
         cookies = getCookie(userName)
+        if len(cookies) == 0:
+            driver.close()
+
+            return None
 
         for cookie in cookies:
             driver.add_cookie(cookie)
@@ -56,79 +67,94 @@ def initChrome(userName):
     except Exception as e:
         print(e.__str__())
 
-        driver.close()
-
         return None
 
 
-def getDriver(userName):
+def createDriver(userName):
     return initChrome(userName)
 
 
-def initChromePool():
-    _chrome_drivers = []
+def createChromePool():
+    global chrome_drivers
     for user in aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['users']:
-        _chrome_drivers.append(getDriver(user))
+        _driver = createDriver(user)
+        if _driver is not None:
+            print("创建链接成功，" + user)
+            chrome_drivers.append({'driver': _driver, 'userName': user})
 
-    return _chrome_drivers
-
-
-chrome_drivers = initChromePool()
-
-
-def getDriverFromPool():
-    with aliImageSearchConst.indexLocking:
-        if aliImageSearchConst.CURRENT >= len(chrome_drivers):
-            return None
-        else:
-            aliImageSearchConst.CURRENT = aliImageSearchConst.CURRENT + 1
-
-        aliImageSearchConst.index = aliImageSearchConst.index + 1
-
-        return chrome_drivers[aliImageSearchConst.index % len(chrome_drivers)]
+    print("链接池初始化完成")
 
 
-def releaseDriverToPool():
-    with aliImageSearchConst.indexLocking:
-        if aliImageSearchConst.CURRENT > 0:
-            aliImageSearchConst.CURRENT = aliImageSearchConst.CURRENT - 1
+def getDriverFromPool(userName):
+    for conn in chrome_drivers:
+        if conn['userName'] == userName:
+            return conn['driver']
+
+    return None
 
 
-def aliSearch(imageUrl):
-    _driver = getDriverFromPool()
-    if _driver is None:
-        return []
+def destroyPool():
+    global chrome_drivers
+    for conn in chrome_drivers:
+        conn['driver'].close()
+        print("销毁链接成功：" + conn['userName'])
 
-    try:
-        _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
+    chrome_drivers.clear()
 
-        _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
-
-        time.sleep(1)
-
-        products = _driver.find_elements(By.XPATH, "//div[@class='img-container']/div/a/div[@class='img']")
-
-        urls = []
-        for detail in products:
-            if len(urls) >= 5:
-                break
-
-            urlStr = detail.get_attribute('style')
-
-            begin = urlStr.index("url") + 5
-            urlStr = urlStr[begin:len(urlStr) - 3]
-
-            urls.append(urlStr)
-
-        return urls
-    except Exception as e:
-        print(e.__str__())
-
-        return []
-    finally:
-        releaseDriverToPool()
+    print("销毁完所有的链接.")
 
 
+def reloadChromePool():
+    destroyPool()
+    createChromePool()
 
 
+def aliSearch(imageUrl, userName):
+    with thread_pool_lock:
+        _driver = getDriverFromPool(userName)
+        if _driver is None:
+            return []
 
+        try:
+            _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
+
+            _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
+
+            time.sleep(1)
+
+            products = _driver.find_elements(By.XPATH, "//div[@class='img-container']/div/a/div[@class='img']")
+
+            urls = []
+            for detail in products:
+                if len(urls) >= 5:
+                    break
+
+                urlStr = detail.get_attribute('style')
+
+                begin = urlStr.index("url") + 5
+                urlStr = urlStr[begin:len(urlStr) - 3]
+
+                urls.append(urlStr)
+
+            return urls
+        except Exception as e:
+            print(e.__str__())
+
+            return []
+
+
+def updateCookie(userName, cookie):
+    with thread_pool_lock:
+        cookiePath = aliImageSearchConfig.aliImageSearchConfig['aliImageSearch']['cookieDir']
+        cookieFile = cookiePath + userName + '.cookie'
+
+        if os.path.exists(cookieFile):
+            os.remove(cookieFile)
+
+        with open(cookieFile, 'w') as file:
+            file.write(json.dumps(cookie))
+
+        reloadChromePool()
+
+
+createChromePool()

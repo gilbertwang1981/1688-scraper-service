@@ -29,7 +29,6 @@ RUN apt-get install libpango-1.0 -y
 
 COPY aliImageSearch.py /opt/apps/kp-1688-search
 COPY aliImageSearchService.py /opt/apps/kp-1688-search
-COPY aliImageSearchConst.py /opt/apps/kp-1688-search
 COPY aliImageSearchConfig.py /opt/apps/kp-1688-search
 
 COPY aliImageSearch.yaml /opt/apps/kp-1688-search
