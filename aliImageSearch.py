@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 import aliImageSearchConfig
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 import os
 
 thread_pool_lock = threading.Lock()
@@ -116,9 +117,9 @@ def aliSearch(imageUrl, userName):
             return []
 
         try:
-            _driver.find_element(By.XPATH, "//input[@id='alisearch-input']").send_keys(imageUrl)
-
-            _driver.find_element(By.XPATH, "//button[contains(text(), '搜')]").click()
+            element = _driver.find_element(By.XPATH, "//input[@id='alisearch-input']")
+            element.send_keys(imageUrl)
+            element.send_keys(Keys.RETURN)
 
             time.sleep(1)
 
