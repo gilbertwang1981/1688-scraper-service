@@ -7,6 +7,9 @@ import aliVendorConfig
 import pymysql
 
 
+chrome_driver_instance = None
+
+
 def getDatabaseConnection4Vendor():
     mysqlConn4Vendor = pymysql.connect(host=aliVendorConfig.aliVendorConfig['aliVendor']['db']['host'],
                                        port=aliVendorConfig.aliVendorConfig['aliVendor']['db']['port'],
@@ -51,44 +54,57 @@ def getProductIds(_begin, _offset, _categoryOne, _categoryThree):
             _connection.close()
 
 
-def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
+def createChromeDriver(cookieName):
+    global chrome_driver_instance
+
+    if chrome_driver_instance:
+        return
+
     try:
-        driver = webdriver.Chrome()
+        chrome_driver_instance = webdriver.Chrome()
 
-        driver.get("https://www.1688.com")
+        chrome_driver_instance.get("https://www.1688.com")
 
-        time.sleep(3)
+        time.sleep(1)
 
-        driver.delete_all_cookies()
+        chrome_driver_instance.delete_all_cookies()
 
-        cookie_str = getCookie(_userName)
+        cookie_str = getCookie(cookieName)
         if cookie_str is None:
-            print("加载cookie失败," + _userName)
+            print("加载cookie失败," + cookieName)
 
             return
 
         cookies = json.loads(cookie_str)
 
         for c in cookies:
-            driver.add_cookie(c)
+            chrome_driver_instance.add_cookie(c)
 
-        driver.refresh()
+        chrome_driver_instance.refresh()
+    except Exception as e:
+        print(e.__str__())
 
-        driver.get(_categoryUrl)
 
-        time.sleep(3)
+def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
+    global chrome_driver_instance
+    try:
+        createChromeDriver(_userName)
+
+        chrome_driver_instance.get(_categoryUrl)
+
+        time.sleep(1)
 
         c = 0
         off = 2000
-        while c < 35:
+        while c < 15:
             off = off + c * 3000
-            driver.execute_script("window.scrollBy(0," + str(off) + ")")
+            chrome_driver_instance.execute_script("window.scrollBy(0," + str(off) + ")")
 
             time.sleep(1)
 
             c = c + 1
 
-        offerIds = driver.find_elements(By.XPATH, "//div[@class='list']/div")
+        offerIds = chrome_driver_instance.find_elements(By.XPATH, "//div[@class='list']/div")
 
         i = 0
         _connection = getDatabaseConnection4Vendor()
@@ -111,8 +127,6 @@ def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
     except Exception as e:
         print(e.__str__())
     finally:
-        driver.close()
-
         if _cursor:
             _cursor.close()
         if _connection:
@@ -120,32 +134,13 @@ def initProductIds(_userName, _categoryUrl, _categoryOne, _categoryThree):
 
 
 def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
+    global chrome_driver_instance
     try:
-        driver = webdriver.Chrome()
+        createChromeDriver(_userName)
 
-        driver.get("https://www.1688.com")
-
-        time.sleep(3)
-
-        driver.delete_all_cookies()
-
-        cookie_str = getCookie(_userName)
-        if cookie_str is None:
-            print("加载cookie失败," + _userName)
-
-            return
-
-        cookies = json.loads(cookie_str)
-
-        for c in cookies:
-            driver.add_cookie(c)
-
-        driver.refresh()
-
-        time.sleep(1)
+        print("本次要处理的商品数:" + str(len(productIds)))
 
         i = 0
-        print("本次要处理的商品数:" + str(len(productIds)))
         _connection = getDatabaseConnection4Vendor()
         _cursor = _connection.cursor()
         while i < len(productIds):
@@ -155,25 +150,25 @@ def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
                         'clickid=fcf11b87a6f14ad796969a9a52836c9b&' \
                         'sessionid=a659238081d473668bf0881d132d92ee'
 
-            driver.get(detailUrl)
+            chrome_driver_instance.get(detailUrl)
 
-            time.sleep(3)
+            time.sleep(1)
 
             try:
-                title = driver.find_element(By.XPATH, "//div[@class='title-text']").text
+                title = chrome_driver_instance.find_element(By.XPATH, "//div[@class='title-text']").text
 
-                driver.find_element(By.XPATH, "//a[text()='联系方式']").click()
+                chrome_driver_instance.find_element(By.XPATH, "//a[text()='联系方式']").click()
 
-                time.sleep(3)
+                time.sleep(1)
 
-                windows = driver.window_handles
-                driver.switch_to.window(windows[-1])
-                driver.maximize_window()
+                windows = chrome_driver_instance.window_handles
+                chrome_driver_instance.switch_to.window(windows[-1])
+                chrome_driver_instance.maximize_window()
 
-                phone = driver.find_element(By.XPATH,
+                phone = chrome_driver_instance.find_element(By.XPATH,
                                             "//div[contains(text(), '手机：')]/following-sibling::*[position()=1]").text
 
-                company = driver.find_element(By.XPATH,
+                company = chrome_driver_instance.find_element(By.XPATH,
                                               "//div[text()='联系方式']/following-sibling::*[position()=1]").text
             except Exception as e:
                 i = i + 1
@@ -192,14 +187,15 @@ def scrapVendorsByCategory(_categoryUrl, _userName, _productIds):
 
             i = i + 1
 
-            windows = driver.window_handles
-            driver.switch_to.window(windows[-1])
+            windows = chrome_driver_instance.window_handles
+            chrome_driver_instance.switch_to.window(windows[-1])
     except Exception as e:
         print(e.__str__())
         if _connection:
             _connection.rollback()
     finally:
-        driver.close()
+        if chrome_driver_instance:
+            chrome_driver_instance.close()
         if _cursor:
             _cursor.close()
         if _connection:
