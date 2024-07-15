@@ -1,4 +1,9 @@
+import json
 import time
+
+import requests
+
+import aliWangWangConfig
 from aliWangWangChat import ChatObject
 import aliWangWangConnection
 from selenium.webdriver.common.by import By
@@ -168,6 +173,28 @@ def chatWithCustomer(offerId, chatList, userName):
                 driver.find_element(By.XPATH, "//div/button/span").click()
 
                 time.sleep(1)
+
+                productUrl = "https://detail.1688.com/offer/{}.html".format(offerId)
+                content = "【阿里旺旺消息发送日志】\n发送者：{} \n商品链接：{} \n内容：{}".format(userName, productUrl, chatContent)
+                notifyWechat(content)
         except Exception as e:
             print(e.__str__())
+
+
+def notifyWechat(content):
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    message_data = {
+        "msgtype": "text",
+        "text": {
+            "content": content
+        }
+    }
+
+    requests.post(aliWangWangConfig.aliWangWangConfig['aliWangWang']['wechatHook'],
+                  data=json.dumps(message_data), headers=headers, verify=False)
+
+
 

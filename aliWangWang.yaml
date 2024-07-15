@@ -1,9 +1,8 @@
 aliWangWang:
   port: 10015
   prod: 0
-  count: 2
+  count: 5
   users:
-    - '17620848116'
     - 'tq02h2a_gb1981'
   cookieDir: '/Users/gilbert/vendor-info/'
-  # cookieDir: '/opt/apps/kp-aliWangWang-chat/'
+  wechatHook: ''
