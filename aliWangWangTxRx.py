@@ -122,10 +122,12 @@ def getChatHistory(offerId, userName):
                         data.chats.append(content[2])
 
                     chatHistory.append(data)
+
+            return chatHistory
         except Exception as e:
             e.__str__()
 
-        return chatHistory
+            return []
 
 
 def chatWithCustomer(offerId, chatList, userName):
@@ -165,7 +167,7 @@ def chatWithCustomer(offerId, chatList, userName):
 
             driver.get(chat_url)
 
-            time.sleep(1)
+            time.sleep(2)
 
             for chatContent in chatList:
                 driver.find_element(By.XPATH, "//div[@class='ww_input']//pre").send_keys(chatContent)
@@ -175,7 +177,7 @@ def chatWithCustomer(offerId, chatList, userName):
                 time.sleep(1)
 
                 productUrl = "https://detail.1688.com/offer/{}.html".format(offerId)
-                content = "【阿里旺旺消息发送日志】\n发送者：{} \n商品链接：{} \n内容：{}".format(userName, productUrl, chatContent)
+                content = "【消息发送日志】\n发送者：{} \n商品链接：{} \n内容：{}".format(userName, productUrl, chatContent)
                 notifyWechat(content)
         except Exception as e:
             print(e.__str__())
