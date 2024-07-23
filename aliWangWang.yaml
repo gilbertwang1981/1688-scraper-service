@@ -1,7 +1,7 @@
 aliWangWang:
   port: 10015
   prod: 1
-  count: 20
+  count: 50
   users:
     - 'tq02h2a_gb1981'
     - '18565086913'

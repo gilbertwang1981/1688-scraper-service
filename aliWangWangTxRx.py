@@ -43,7 +43,11 @@ def getProductDetail(offerId, userName):
             crosses = driver.find_elements(By.XPATH, "//div[@class='od-pc-offer-cross']//div[@class='offer-attr-list']"
                                                      "//div[@class='offer-attr-item']")
 
+            images = driver.find_elements(By.XPATH, "//img[@class = 'detail-gallery-img']")
+
             p = Product()
+            for image in images:
+                p.images.append(image.get_attribute('src'))
 
             p.title = title
 

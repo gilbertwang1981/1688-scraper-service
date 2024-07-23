@@ -5,5 +5,6 @@ class Product:
         self.start = ''
         self.pAttrs = {}
         self.pCross = {}
+        self.images = []
 
 
