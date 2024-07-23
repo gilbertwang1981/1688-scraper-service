@@ -43,9 +43,23 @@ def getProductDetail(offerId, userName):
             crosses = driver.find_elements(By.XPATH, "//div[@class='od-pc-offer-cross']//div[@class='offer-attr-list']"
                                                      "//div[@class='offer-attr-item']")
 
-            images = driver.find_elements(By.XPATH, "//img[@class = 'detail-gallery-img']")
-
             p = Product()
+
+            images = driver.find_elements(By.XPATH, "//img[@class = 'detail-gallery-img']")
+            for image in images:
+                p.images.append(image.get_attribute('src'))
+
+            c = 0
+            off = 1000
+            while c < 3:
+                off = off + c * 3000
+                driver.execute_script("window.scrollBy(0," + str(off) + ")")
+
+                time.sleep(0.5)
+
+                c = c + 1
+
+            images = driver.find_elements(By.XPATH, "//img[@class = 'desc-img-loaded']")
             for image in images:
                 p.images.append(image.get_attribute('src'))
 
@@ -65,6 +79,17 @@ def getProductDetail(offerId, userName):
 
             p.price = price[0].text
             p.start = start
+
+            try:
+                driver.find_element(By.XPATH, "//span[contains(text(), '视频展示')]").click()
+
+                time.sleep(0.5)
+
+                p.video = driver.find_element(By.XPATH,
+                                              "//div[@class='detail-video-wrapper']/video").get_attribute('src')
+            except Exception as e:
+                e.__str__()
+                pass
 
             return p
         except Exception as e:

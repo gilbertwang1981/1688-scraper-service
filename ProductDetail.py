@@ -6,5 +6,6 @@ class Product:
         self.pAttrs = {}
         self.pCross = {}
         self.images = []
+        self.video = ''
 
 
