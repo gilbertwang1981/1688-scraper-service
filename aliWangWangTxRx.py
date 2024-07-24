@@ -2,6 +2,7 @@ import json
 import time
 
 import requests
+from selenium.webdriver import Keys
 
 import aliWangWangConfig
 from aliWangWangChat import ChatObject
@@ -45,25 +46,62 @@ def getProductDetail(offerId, userName):
 
             p = Product()
 
-            images = driver.find_elements(By.XPATH, "//img[@class = 'detail-gallery-img']")
-            for image in images:
-                p.images.append(image.get_attribute('src'))
+            propsImages = driver.find_elements(By.XPATH, "//div[@class='prop-img']")
+            propsNames = driver.find_elements(By.XPATH, "//div[@class='prop-name']")
 
-            c = 0
-            off = 1000
-            while c < 3:
-                off = off + c * 3000
-                driver.execute_script("window.scrollBy(0," + str(off) + ")")
+            index = 0
+            for name in propsNames:
+                colorUrl = propsImages[index].get_attribute("style")
+                begin = colorUrl.find("url(\"") + 5
+                end = colorUrl.find("\")")
+
+                colorUrl = colorUrl[begin: end]
+
+                colorTitle = name.text
+
+                color = {
+                    "url": colorUrl,
+                    "title": colorTitle
+                }
+
+                p.colors.append(color)
+
+                index = index + 1
+
+            try:
+                driver.execute_script("window.scrollBy(0," + str(500) + ")")
+
+                expand = driver.find_element(By.XPATH, "//div[@class='sku-wrapper-expend-button']")
+                if expand.is_displayed():
+                    expand.click()
 
                 time.sleep(0.5)
+            except Exception as e:
+                print(e.__str__())
+                pass
 
-                c = c + 1
+            skuNames = driver.find_elements(By.XPATH, "//div[@class='sku-item-name']")
+            skuPrices = driver.find_elements(By.XPATH, "//div[@class='discountPrice-price']")
+            skuStocks = driver.find_elements(By.XPATH, "//div[@class='sku-item-sale-num']")
+            index = 0
+            for name in skuNames:
+                sku = {
+                    "name": name.text,
+                    "price": skuPrices[index].text,
+                    "stock": skuStocks[index].text
+                }
 
-            images = driver.find_elements(By.XPATH, "//img[@class = 'desc-img-loaded']")
-            for image in images:
-                p.images.append(image.get_attribute('src'))
+                p.skus.append(sku)
 
-            p.title = title
+                index = index + 1
+
+            try:
+                driver.execute_script("window.scrollBy(0," + str(1000) + ")")
+                driver.find_element(By.XPATH, "//div[@class='offer-attr-switch']/i").click()
+                time.sleep(0.5)
+            except Exception as e:
+                print(e.__str__())
+                pass
 
             for product in products:
                 pn = product.find_element(By.XPATH, "span[@class='offer-attr-item-name']").text
@@ -79,6 +117,26 @@ def getProductDetail(offerId, userName):
 
             p.price = price[0].text
             p.start = start
+
+            c = 0
+            off = 1000
+            while c < 3:
+                off = off + c * 3000
+                driver.execute_script("window.scrollBy(0," + str(off) + ")")
+
+                time.sleep(0.5)
+
+                c = c + 1
+
+            images = driver.find_elements(By.XPATH, "//img[@class = 'detail-gallery-img']")
+            for image in images:
+                p.images.append(image.get_attribute('src'))
+
+            images = driver.find_elements(By.XPATH, "//img[@class = 'desc-img-loaded']")
+            for image in images:
+                p.images.append(image.get_attribute('src'))
+
+            p.title = title
 
             try:
                 driver.find_element(By.XPATH, "//span[contains(text(), '视频展示')]").click()

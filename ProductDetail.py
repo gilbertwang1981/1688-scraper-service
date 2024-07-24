@@ -7,5 +7,7 @@ class Product:
         self.pCross = {}
         self.images = []
         self.video = ''
+        self.colors = []
+        self.skus = []
 
 
