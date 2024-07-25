@@ -31,10 +31,12 @@ def getProductDetail(offerId, userName):
 
             driver.get(detailUrl)
 
-            time.sleep(2)
+            time.sleep(1)
 
             title = driver.find_element(By.XPATH, "//div[contains(@class, 'title-text')]").text
+
             price = driver.find_elements(By.XPATH, "//span[contains(@class, 'price-text')]")
+
             start = driver.find_element(By.XPATH, "//span[contains(@class, 'unit-text')]").text
 
             products = driver.find_elements(By.XPATH, "//div[@class='od-pc-attribute']//div[@class='offer-attr-list']"
@@ -50,14 +52,15 @@ def getProductDetail(offerId, userName):
 
             index = 0
             for name in propsNames:
-                colorUrl = propsImages[index].get_attribute("style")
-                begin = colorUrl.find("url(\"") + 5
-                end = colorUrl.find("\")")
+                colorUrl = ''
+                if (len(propsImages) - 1) >= index:
+                    colorUrl = propsImages[index].get_attribute("style")
+                    begin = colorUrl.find("url(\"") + 5
+                    end = colorUrl.find("\")")
 
-                colorUrl = colorUrl[begin: end]
+                    colorUrl = colorUrl[begin: end]
 
                 colorTitle = name.text
-
                 color = {
                     "url": colorUrl,
                     "title": colorTitle
@@ -68,7 +71,7 @@ def getProductDetail(offerId, userName):
                 index = index + 1
 
             try:
-                driver.execute_script("window.scrollBy(0," + str(500) + ")")
+                driver.execute_script("window.scrollBy(0," + str(800) + ")")
 
                 expand = driver.find_element(By.XPATH, "//div[@class='sku-wrapper-expend-button']")
                 if expand.is_displayed():
