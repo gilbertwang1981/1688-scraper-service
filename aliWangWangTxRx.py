@@ -2,7 +2,6 @@ import json
 import time
 
 import requests
-from selenium.webdriver import Keys
 
 import aliWangWangConfig
 from aliWangWangChat import ChatObject
@@ -32,7 +31,7 @@ def getProductDetail(offerId, userName):
 
             driver.get(detailUrl)
 
-            time.sleep(1)
+            time.sleep(2)
 
             title = driver.find_element(By.XPATH, "//div[contains(@class, 'title-text')]").text
             price = driver.find_elements(By.XPATH, "//span[contains(@class, 'price-text')]")
