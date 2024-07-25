@@ -87,10 +87,18 @@ def getProductDetail(offerId, userName):
             skuStocks = driver.find_elements(By.XPATH, "//div[@class='sku-item-sale-num']")
             index = 0
             for name in skuNames:
+                skuStock = '0'
+                if skuStocks is not None and (len(skuStocks) - 1) >= index:
+                    skuStock = skuStocks[index].text
+
+                skuPrice = '0'
+                if skuPrices is not None and (len(skuPrices) - 1) >= index:
+                    skuPrice = skuPrices[index].text
+
                 sku = {
                     "name": name.text,
-                    "price": skuPrices[index].text,
-                    "stock": skuStocks[index].text
+                    "price": skuPrice,
+                    "stock": skuStock
                 }
 
                 p.skus.append(sku)
