@@ -90,22 +90,27 @@ def listProducts(_url, _userName):
     try:
         createChromeDriver(_userName)
 
-        chrome_driver_instance.get(_url)
-
-        time.sleep(5)
-
-        preLoading()
-
-        details = chrome_driver_instance.find_elements(By.XPATH, "//a[contains(@class, 'ProductItem__ImageWrapper')]")
+        total = JubileeConfig.jubileeConfig['jubilee']['totalPages']
+        count = 1
         urls = []
-        for detail in details:
-            urls.append(detail.get_attribute('href'))
+        while count <= total:
+            actualUrl = _url + "?page=" + str(count)
 
-        for url in urls:
-            print("Ready to scrapy " + url)
-            detailProduct(url)
+            chrome_driver_instance.get(actualUrl)
 
             time.sleep(5)
+
+            preLoading()
+
+            details = chrome_driver_instance.find_elements(By.XPATH,
+                                                           "//a[contains(@class, 'ProductItem__ImageWrapper')]")
+            for detail in details:
+                urls.append(detail.get_attribute('href'))
+
+            count = count + 1
+
+        for detailUrl in urls:
+            detailProduct(detailUrl)
 
     except Exception as e:
         print(e.__str__)
@@ -115,4 +120,5 @@ def listProducts(_url, _userName):
 
 
 if __name__ == '__main__':
-    listProducts('https://jubilee.ae/collections/men', 'wanghan52@126.com')
+    listProducts(JubileeConfig.jubileeConfig['jubilee']['initUrl'],
+                 JubileeConfig.jubileeConfig['jubilee']['userName'])

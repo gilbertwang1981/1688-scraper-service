@@ -1,4 +1,5 @@
 jubilee:
+  userName: 'wanghan52@126.com'
   cookieDir: '/Users/gilbert/jubilee/'
-  offset: 30
-  begin: 0
+  initUrl: 'https://jubilee.ae/collections/men'
+  totalPages: 2
