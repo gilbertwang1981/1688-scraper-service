@@ -1,11 +1,24 @@
 import time
+
+import pymysql
 from selenium import webdriver
 import json
 from selenium.webdriver.common.by import By
+from urllib.parse import quote
 
 import JubileeConfig
 
 chrome_driver_instance = None
+
+
+def getDatabaseConnection4Jubilee():
+    mysqlConn4Jubilee = pymysql.connect(host=JubileeConfig.jubileeConfig['jubilee']['db']['host'],
+                                        port=JubileeConfig.jubileeConfig['jubilee']['db']['port'],
+                                        user=JubileeConfig.jubileeConfig['jubilee']['db']['user'],
+                                        password=JubileeConfig.jubileeConfig['jubilee']['db']['pass'],
+                                        database=JubileeConfig.jubileeConfig['jubilee']['db']['dbName'])
+
+    return mysqlConn4Jubilee
 
 
 def getCookie(_userName):
@@ -64,24 +77,52 @@ def detailProduct(_url):
         chrome_driver_instance.get(_url)
         time.sleep(3)
 
-        title = chrome_driver_instance.find_element(By.XPATH,
-                                                    "//div[contains(@class, 'ProductMeta')]"
-                                                    "//h1[contains(@class, 'ProductMeta__Title')]").text
+        try:
+            title = chrome_driver_instance.find_element(By.XPATH,
+                                                        "//div[contains(@class, 'ProductMeta')]"
+                                                      "//h1[contains(@class, 'ProductMeta__Title')]").text
+        except Exception as e:
+            print("找不到title， " + e.__str__())
 
-        price = chrome_driver_instance.find_elements(By.XPATH,
-                                                     "//div[contains(@class, 'ProductMeta')]"
-                                                     "//span[contains(@class, 'ProductMeta__Price')]")[0].text
+        try:
+            price = chrome_driver_instance.find_elements(By.XPATH,
+                                                         "//div[contains(@class, 'ProductMeta')]"
+                                                         "//span[contains(@class, 'ProductMeta__Price')]")[0].text
+        except Exception as e:
+            print("找不到price， " + e.__str__())
 
-        image = chrome_driver_instance.find_element(By.XPATH,
-                                                    "//div[contains(@class, 'Product__Wrapper')]"
-                                                    "//img[contains(@class, 'Image--fadeIn')]"). \
-            get_attribute('data-srcset')
+        try:
+            image = chrome_driver_instance.find_element(By.XPATH,
+                                                        "//div[contains(@class, 'Product__Wrapper')]"
+                                                        "//img[contains(@class, 'Image--fadeIn')]"). \
+                get_attribute('data-srcset')
+        except Exception as e:
+            print("找不到images， " + e.__str__())
 
-        description = chrome_driver_instance.find_element(By.XPATH, "//div[@class='Rte']").text
+        try:
+            description = chrome_driver_instance.find_element(By.XPATH, "//div[@class='Rte']").text
+        except Exception as e:
+            print("找不到description， " + e.__str__())
 
-        print(title + "\n" + image + "\n" + price + "\n" + description + "\n\n")
+        _connection = getDatabaseConnection4Jubilee()
+
+        _cursor = _connection.cursor()
+
+        _cursor.execute("insert into jubilee_Product_scrapy(title, price, description, images) "
+                        "values ('" + quote(title) + "', '" +
+                        str(price) + "', '" + quote(description) + "', '" + image + "')")
+
+        _connection.commit()
+
     except Exception as e:
         print(e.__str__())
+        if _connection:
+            _connection.rollback()
+    finally:
+        if _cursor:
+            _cursor.close()
+        if _connection:
+            _connection.close()
 
 
 def listProducts(_url, _userName):
@@ -91,7 +132,7 @@ def listProducts(_url, _userName):
         createChromeDriver(_userName)
 
         total = JubileeConfig.jubileeConfig['jubilee']['totalPages']
-        count = 1
+        count = JubileeConfig.jubileeConfig['jubilee']['begin']
         urls = []
         while count <= total:
             actualUrl = _url + "?page=" + str(count)
