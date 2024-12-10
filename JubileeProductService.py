@@ -72,7 +72,7 @@ def preLoading():
         c = c + 1
 
 
-def detailProduct(_url):
+def detailProduct(_url, _category):
     try:
         chrome_driver_instance.get(_url)
         time.sleep(3)
@@ -80,7 +80,7 @@ def detailProduct(_url):
         try:
             title = chrome_driver_instance.find_element(By.XPATH,
                                                         "//div[contains(@class, 'ProductMeta')]"
-                                                      "//h1[contains(@class, 'ProductMeta__Title')]").text
+                                                        "//h1[contains(@class, 'ProductMeta__Title')]").text
         except Exception as e:
             print("找不到title， " + e.__str__())
 
@@ -108,9 +108,9 @@ def detailProduct(_url):
 
         _cursor = _connection.cursor()
 
-        _cursor.execute("insert into jubilee_Product_scrapy(title, price, description, images) "
+        _cursor.execute("insert into jubilee_Product_scrapy(title, price, description, images, category) "
                         "values ('" + quote(title) + "', '" +
-                        str(price) + "', '" + quote(description) + "', '" + image + "')")
+                        str(price) + "', '" + quote(description) + "', '" + image + "', '" + _category + "')")
 
         _connection.commit()
 
@@ -125,7 +125,7 @@ def detailProduct(_url):
             _connection.close()
 
 
-def listProducts(_url, _userName):
+def listProducts(_url, _userName, _category):
     global chrome_driver_instance
 
     try:
@@ -151,7 +151,7 @@ def listProducts(_url, _userName):
             count = count + 1
 
         for detailUrl in urls:
-            detailProduct(detailUrl)
+            detailProduct(detailUrl, _category)
 
     except Exception as e:
         print(e.__str__)
@@ -162,4 +162,5 @@ def listProducts(_url, _userName):
 
 if __name__ == '__main__':
     listProducts(JubileeConfig.jubileeConfig['jubilee']['initUrl'],
-                 JubileeConfig.jubileeConfig['jubilee']['userName'])
+                 JubileeConfig.jubileeConfig['jubilee']['userName'],
+                 JubileeConfig.jubileeConfig['jubilee']['category'])
