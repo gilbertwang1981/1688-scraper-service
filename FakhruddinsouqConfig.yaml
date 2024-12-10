@@ -1,0 +1,13 @@
+fakhruddinsouq:
+  userName: 'wanghan52@126.com'
+  cookieDir: '/Users/gilbert/fakhruddinsouq/'
+  initUrl: 'https://www.fakhruddinsouq.com/baby-toddler'
+  category: 'baby-toddler'
+  totalPages: 2
+  begin: 2
+  db:
+    host: 192.168.8.12
+    port: 13306
+    user: root
+    pass: KPqazxsw
+    dbName: kp_sk_sync
