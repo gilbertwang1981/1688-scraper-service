@@ -1,9 +1,10 @@
 jubilee:
   userName: 'wanghan52@126.com'
   cookieDir: '/Users/gilbert/jubilee/'
-  initUrl: 'https://jubilee.ae/collections/men'
-  totalPages: 31
-  begin: 2
+  initUrl: 'https://jubilee.ae/collections/women'
+  category: 'women'
+  totalPages: 25
+  begin: 16
   db:
     host: 192.168.8.12
     port: 13306
